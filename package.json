@@ -27,6 +27,7 @@
     "@mastra/libsql": "0.11.0",
     "@mastra/loggers": "^0.10.2",
     "@mastra/memory": "0.11.1",
+    "@mysten/deepbook-v3": "^0.15.4",
     "@mysten/sui": "^1.35.0",
     "dotenv": "17.0.1",
     "ollama-ai-provider": "^1.2.0",

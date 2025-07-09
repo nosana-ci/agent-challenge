@@ -9,6 +9,7 @@
         "@mastra/libsql": "0.11.0",
         "@mastra/loggers": "^0.10.2",
         "@mastra/memory": "0.11.1",
+        "@mysten/deepbook-v3": "^0.15.4",
         "@mysten/sui": "^1.35.0",
         "dotenv": "17.0.1",
         "ollama-ai-provider": "^1.2.0",
@@ -367,6 +368,8 @@
     "@msgpack/msgpack": ["@msgpack/msgpack@3.1.2", "", {}, "sha512-JEW4DEtBzfe8HvUYecLU9e6+XJnKDlUAIve8FvPzF3Kzs6Xo/KuZkZJsDH0wJXl/qEZbeeE7edxDNY3kMs39hQ=="],
 
     "@mysten/bcs": ["@mysten/bcs@1.6.3", "", { "dependencies": { "@mysten/utils": "0.1.0", "@scure/base": "^1.2.6" } }, "sha512-QQ6u0U7a4+/o6rZ9tALTeGYMdf6V5z/HkRI/mhD5/fSr80DJoGzOWpFszcN/fhJpKb36vBaSQUMpS7yNQ10xBQ=="],
+
+    "@mysten/deepbook-v3": ["@mysten/deepbook-v3@0.15.4", "", { "dependencies": { "@mysten/sui": "1.35.0" } }, "sha512-dgMEKfNceZnNPn0JGmfb8srG/czKwf2s1wbro7Or4r0FZ96QmLg6Syky4KdXCDvbi+Dt2yNmK4bVzZBwTIVIxg=="],
 
     "@mysten/sui": ["@mysten/sui@1.35.0", "", { "dependencies": { "@graphql-typed-document-node/core": "^3.2.0", "@mysten/bcs": "1.6.3", "@mysten/utils": "0.1.0", "@noble/curves": "^1.9.1", "@noble/hashes": "^1.8.0", "@scure/base": "^1.2.6", "@scure/bip32": "^1.7.0", "@scure/bip39": "^1.6.0", "gql.tada": "^1.8.2", "graphql": "^16.11.0", "poseidon-lite": "^0.2.0", "valibot": "^0.36.0" } }, "sha512-za0+SiEFtjAjk0sJ8P9Q/X/m2E/YrXQ/UNsotEwb/eCqPyGS8A9Mrxkhm/iIgR1+AAl1OWUWCrqgJVe7u2i61A=="],
 
