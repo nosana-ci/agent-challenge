@@ -1,6 +1,8 @@
 import { Agent } from "@mastra/core/agent";
 import { model } from "../../config";
 import { yourTool } from "../your-agent/your-tool";
+import express from "express";
+import funFactRouter from "./fun-fact-router";
 
 // Define Agent Name
 const name = "Your Agent";
@@ -21,9 +23,15 @@ const instructions = `
       Use the yourTool to fetch current weather data.
 `;
 
+
+// Optionally, you can export the express app for use elsewhere
+export const app = express();
+app.use(express.json());
+app.use(funFactRouter);
+
 export const yourAgent = new Agent({
-	name,
-	instructions,
-	model,
-	tools: { yourTool },
+  name,
+  instructions,
+  model,
+  tools: { yourTool },
 });
