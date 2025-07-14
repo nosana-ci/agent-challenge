@@ -1,6 +1,6 @@
 import { createOllama } from "ollama-ai-provider";
 import { Agent } from "@mastra/core/agent";
-import { solanaTradeComboTool } from "./src/mastra/agents/solana-trade-agent/tools/solana-trade-tool.js";
+import { solanaTradeComboTool } from "./src/mastra/agents/solana-trade-agent/tools/solana-trade-tool.ts";
 
 // Create a simple model for testing
 const model = createOllama({ baseURL: "http://127.0.0.1:11434/api" }).chat("qwen2.5:1.5b", {
