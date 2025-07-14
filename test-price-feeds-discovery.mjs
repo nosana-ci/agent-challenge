@@ -28,8 +28,30 @@ async function testPythPriceFeedsDiscovery() {
 		
 		console.log(`✅ Successfully discovered ${data.data?.length || 0} price feeds\n`);
 		
+		// Check if data exists and log the response structure
+		console.log('📋 Response structure:');
+		console.log(`   Has data property: ${!!data.data}`);
+		console.log(`   Data type: ${typeof data.data}`);
+		console.log(`   Is array: ${Array.isArray(data.data)}`);
+		
+		if (data.data && data.data.length > 0) {
+			console.log(`   First item keys: ${Object.keys(data.data[0])}`);
+		}
+		
+		// If no data, show the full response for debugging
+		if (!data.data || data.data.length === 0) {
+			console.log('\n🔍 Full response for debugging:');
+			console.log(JSON.stringify(data, null, 2));
+			
+			// Try to use the hardcoded SOL/USD feed instead
+			console.log('\n🔄 Falling back to hardcoded SOL/USD feed...');
+			const hardcodedFeedId = 'ef0d8b6fda2ceba41da15d4095d1da392a0d2f8ed0c6c7bc0f4cfac8c280b56d';
+			await testPriceForFeed(hardcodedFeedId, 'SOL/USD (hardcoded)');
+			return;
+		}
+		
 		// Display all discovered feeds
-		console.log('📊 Discovered Price Feeds:');
+		console.log('\n📊 Discovered Price Feeds:');
 		console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 		
 		data.data.forEach((feed, index) => {
@@ -43,10 +65,13 @@ async function testPythPriceFeedsDiscovery() {
 		});
 		
 		// Find SOL/USD specifically
-		const solUsdFeeds = data.data.filter(feed => 
+		const solUsdFeeds = data.data ? data.data.filter(feed => 
+			feed.attributes &&
+			feed.attributes.base && 
+			feed.attributes.quote_currency &&
 			feed.attributes.base.toLowerCase() === 'sol' && 
 			feed.attributes.quote_currency.toLowerCase() === 'usd'
-		);
+		) : [];
 		
 		console.log(`💰 Found ${solUsdFeeds.length} SOL/USD feed(s):`);
 		
