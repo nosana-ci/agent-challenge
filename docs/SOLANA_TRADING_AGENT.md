@@ -198,7 +198,6 @@ TWITTER_API_KEY=your_twitter_api_key_here
 TWITTER_API_SECRET=your_twitter_api_secret_here
 
 # Optional: Market Data APIs
-COINGECKO_API_KEY=your_coingecko_api_key_here
 SOLANA_RPC_URL=https://api.mainnet-beta.solana.com
 
 # Trading Configuration
