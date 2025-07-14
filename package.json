@@ -3,7 +3,10 @@
   "version": "1.0.0",
   "main": ".mastra/output/index.mjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "tsx tests/unified-test-suite.ts",
+    "test:simple": "node simple-test.mjs",
+    "test:pyth": "node test-pyth-integration.mjs",
+    "test:enhanced": "node test-enhanced-agent.mjs",
     "deploy:agent": "nosana job post --file ./nos_job_def/nosana_mastra.json --market nvidia-3090 --timeout 30",
     "deploy:qwen": "nosana job post --file ./nos_job_def/qwen_nos_jb.json --market nvidia-3090 --timeout 30",
     "dev": "mastra dev",
@@ -39,6 +42,7 @@
     "@nosana/cli": "^1.0.59",
     "@types/node": "^24.0.13",
     "mastra": "^0.10.12",
+    "tsx": "^4.16.2",
     "typescript": "^5.8.3"
   }
 }
