@@ -6,6 +6,7 @@ import { solanaTradeWorkflow } from "./agents/solana-trade-agent/solana-trade-wo
 export const mastra = new Mastra({
 	workflows: { solanaTradeWorkflow }, // can be deleted later
 	agents: { solanaTradeAgent },
+	bundler: { externals: ["@pythnetwork/hermes-client"] },
 	logger: new PinoLogger({
 		name: "Mastra",
 		level: "info",
