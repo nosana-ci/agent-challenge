@@ -36,6 +36,7 @@
     "@mysten/deepbook-v3": "^0.15.5",
     "@mysten/sui": "^1.36.0",
     "@pythnetwork/hermes-client": "^2.0.0",
+    "bigint-buffer": "^1.1.5",
     "dotenv": "17.0.1",
     "https-proxy-agent": "^7.0.6",
     "ollama-ai-provider": "^1.2.0",
@@ -47,7 +48,9 @@
     "@nosana/cli": "^1.0.59",
     "@types/node": "^24.0.13",
     "mastra": "^0.10.12",
+    "node-gyp": "^11.2.0",
     "tsx": "^4.16.2",
     "typescript": "^5.8.3"
-  }
+  },
+  "postinstall": "cd node_modules/bigint-buffer && node-gyp configure && node-gyp build"
 }
