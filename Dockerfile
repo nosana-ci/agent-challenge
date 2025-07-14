@@ -1,16 +1,8 @@
-FROM ollama/ollama:latest
+FROM ollama/ollama:0.7.0
 
-ENV API_BASE_URL=https://nos-dep-2.node.k8s.prd.nos.ci/qwen-3-8b-skea/api
-ENV MODEL_NAME_AT_ENDPOINT=qwen3:8b
+ENV API_BASE_URL=https://5p9r6bnba2i4gkbrde59qtyti8qd7mtkkgrtycrp13bc.node.k8s.prd.nos.ci/api
+ENV MODEL_NAME_AT_ENDPOINT=qwen2.5:7b
 
-# Qwen2.5:1.5b - Docker
-# ENV API_BASE_URL=http://127.0.0.1:11434/api
-# ENV MODEL_NAME_AT_ENDPOINT=qwen2.5:1.5b
-
-
-# Qwen2.5:32b = Docker
-# ENV API_BASE_URL=http://127.0.0.1:11434/api
-# ENV MODEL_NAME_AT_ENDPOINT=qwen2.5:32b
 
 # Install system dependencies and Node.js
 RUN apt-get update && apt-get install -y \
@@ -33,7 +25,7 @@ RUN pnpm install
 COPY . .
 
 # Build the project
-RUN pnpm run build
+# RUN pnpm run build
 
 # Override the default entrypoint
 ENTRYPOINT ["/bin/sh", "-c"]
