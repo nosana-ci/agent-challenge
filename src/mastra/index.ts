@@ -4,8 +4,8 @@ import { solanaTradeAgent } from "./agents/solana-trade-agent/solana-trade-agent
 import { solanaTradeWorkflow } from "./agents/solana-trade-agent/solana-trade-workflow";
 
 export const mastra = new Mastra({
-	workflows: { weatherWorkflow, solanaTradeWorkflow }, // can be deleted later
-	agents: { weatherAgent, yourAgent, solanaTradeAgent },
+	workflows: { solanaTradeWorkflow }, // can be deleted later
+	agents: { solanaTradeAgent },
 	logger: new PinoLogger({
 		name: "Mastra",
 		level: "info",
