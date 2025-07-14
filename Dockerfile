@@ -1,4 +1,4 @@
-FROM ollama/ollama:0.7.0
+FROM ollama/ollama:latest
 
 # Qwen2.5:1.5b - Docker
 ENV API_BASE_URL=http://127.0.0.1:11434/api
