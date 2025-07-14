@@ -1,64 +1,84 @@
-import { twitterMonitorTool } from "../src/mastra/agents/solana-trade-agent/tools/twitter-monitor-tool";
-import { sentimentAnalysisTool } from "../src/mastra/agents/solana-trade-agent/tools/sentiment-analysis-tool";
-import { solanaMarketTool } from "../src/mastra/agents/solana-trade-agent/tools/solana-market-tool";
-import { tradingSignalTool } from "../src/mastra/agents/solana-trade-agent/tools/trading-signal-tool";
+import { solanaTradeAgent } from "../src/mastra/agents/solana-trade-agent/solana-trade-agent";
+import { solanaTradeWorkflow } from "../src/mastra/agents/solana-trade-agent/solana-trade-workflow";
 
-// Simple test function to verify tools work
+// Simple test function to verify the consolidated agent works
 export async function testSolanaTradeAgent() {
-	console.log("🧪 Testing Solana Trade Agent Tools...\n");
+	console.log("🧪 Testing Consolidated Solana Trade Agent...\n");
 	
 	try {
-		// Test 1: Twitter Monitor Tool
-		console.log("1. Testing Twitter Monitor Tool...");
-		const twitterResult = await twitterMonitorTool.execute({
-			context: {
-				accounts: ["elonmusk", "solana"],
-				keywords: ["solana", "blockchain"]
-			}
-		});
-		console.log(`✅ Twitter Monitor: Found ${twitterResult.count} tweets from ${twitterResult.source}`);
+		// Test 1: Agent Interaction
+		console.log("1. Testing Agent Conversation...");
+		const agentResponse = await solanaTradeAgent.generate(
+			[{ role: "user", content: "Give me a Solana trading analysis with medium risk tolerance" }]
+		);
+		console.log(`✅ Agent Response Length: ${agentResponse.content?.length} characters`);
+		console.log(`   Preview: ${agentResponse.content?.slice(0, 200)}...`);
 		
-		// Test 2: Sentiment Analysis Tool
-		console.log("\n2. Testing Sentiment Analysis Tool...");
-		const sentimentResult = await sentimentAnalysisTool.execute({
-			context: {
-				tweets: twitterResult.tweets
-			}
+		// Test 2: Workflow Execution
+		console.log("\n2. Testing Integrated Workflow...");
+		const workflowResult = await solanaTradeWorkflow.run({
+			accounts: ["elonmusk", "solana"],
+			keywords: ["solana", "blockchain", "crypto"],
+			risk_tolerance: 'medium'
 		});
-		console.log(`✅ Sentiment Analysis: ${sentimentResult.overall_label} sentiment with ${(sentimentResult.confidence * 100).toFixed(1)}% confidence`);
 		
-		// Test 3: Market Data Tool
-		console.log("\n3. Testing Market Data Tool...");
-		const marketResult = await solanaMarketTool.execute({
-			context: {}
-		});
-		console.log(`✅ Market Data: SOL price $${marketResult.price} (${marketResult.change_24h_percent.toFixed(2)}% 24h)`);
-		
-		// Test 4: Trading Signal Tool
-		console.log("\n4. Testing Trading Signal Tool...");
-		const signalResult = await tradingSignalTool.execute({
-			context: {
-				sentiment_data: sentimentResult,
-				market_data: marketResult,
-				risk_tolerance: 'medium'
-			}
-		});
-		console.log(`✅ Trading Signal: ${signalResult.signal} with ${(signalResult.confidence * 100).toFixed(1)}% confidence`);
+		const analysis = workflowResult.data.comprehensive_analysis;
+		console.log(`✅ Workflow Complete: Analyzed ${analysis.social_media_insights.tweets_analyzed} tweets`);
 		
 		// Test Summary
-		console.log("\n📊 Test Summary:");
-		console.log(`   Social Sentiment: ${sentimentResult.overall_label}`);
-		console.log(`   Market Momentum: ${marketResult.momentum_indicator}`);
-		console.log(`   Trading Signal: ${signalResult.signal}`);
-		console.log(`   Position Size: ${signalResult.position_size_percent.toFixed(2)}%`);
-		console.log(`   Entry Price: $${signalResult.entry_price}`);
-		console.log(`   Stop Loss: $${signalResult.stop_loss}`);
-		console.log(`   Take Profit: $${signalResult.take_profit}`);
+		console.log("\n📊 Comprehensive Analysis Summary:");
+		console.log(`   Data Source: ${analysis.social_media_insights.data_source}`);
+		console.log(`   Social Sentiment: ${analysis.social_media_insights.overall_sentiment} (${(analysis.social_media_insights.confidence * 100).toFixed(1)}%)`);
+		console.log(`   Current Price: $${analysis.market_analysis.current_price}`);
+		console.log(`   24h Change: ${analysis.market_analysis.price_change_24h.toFixed(2)}%`);
+		console.log(`   Market Momentum: ${analysis.market_analysis.momentum}`);
+		console.log(`   Volume Signal: ${analysis.market_analysis.volume_analysis}`);
+		console.log(`   Trading Signal: ${analysis.trading_recommendation.signal}`);
+		console.log(`   Confidence: ${(analysis.trading_recommendation.confidence * 100).toFixed(1)}%`);
+		console.log(`   Position Size: ${analysis.trading_recommendation.position_size.toFixed(2)}%`);
+		console.log(`   Entry Price: $${analysis.trading_recommendation.entry_price}`);
+		console.log(`   Stop Loss: $${analysis.trading_recommendation.stop_loss}`);
+		console.log(`   Take Profit: $${analysis.trading_recommendation.take_profit}`);
+		console.log(`   Risk Level: ${analysis.risk_assessment.risk_level}`);
+		console.log(`   Volatility Warning: ${analysis.risk_assessment.volatility_warning ? 'Yes' : 'No'}`);
+		
+		console.log("\n🎯 Key Influences:");
+		analysis.social_media_insights.key_influences.forEach((influence: string, index: number) => {
+			console.log(`   ${index + 1}. ${influence}`);
+		});
+		
+		console.log(`\n📋 Summary: ${analysis.summary}`);
 		
 		console.log("\n🎉 All tests passed successfully!");
+		console.log("   ✅ Agent responds to trading queries");
+		console.log("   ✅ Workflow executes end-to-end analysis");
+		console.log("   ✅ Social sentiment analysis integrated");
+		console.log("   ✅ Market data analysis integrated");
+		console.log("   ✅ Trading signals generated with risk management");
 		
 	} catch (error) {
 		console.error("❌ Test failed:", error);
+	}
+}
+
+// Test just the workflow without agent conversation
+export async function testWorkflowOnly() {
+	console.log("🧪 Testing Workflow Only...\n");
+	
+	try {
+		const workflowResult = await solanaTradeWorkflow.run({
+			accounts: ["elonmusk", "solana", "solanalabs"],
+			keywords: ["solana", "sol", "blockchain", "crypto"],
+			risk_tolerance: 'low'
+		});
+		
+		const analysis = workflowResult.data.comprehensive_analysis;
+		console.log("✅ Workflow executed successfully");
+		console.log(`📊 Analysis: ${analysis.summary}`);
+		console.log(`� Signal: ${analysis.trading_recommendation.signal} (${(analysis.trading_recommendation.confidence * 100).toFixed(1)}% confidence)`);
+		
+	} catch (error) {
+		console.error("❌ Workflow test failed:", error);
 	}
 }
 
