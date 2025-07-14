@@ -7,8 +7,8 @@
     "test:simple": "node simple-test.mjs",
     "test:pyth": "node test-pyth-integration.mjs",
     "test:enhanced": "node test-enhanced-agent.mjs",
-    "deploy:agent": "nosana job post --file ./nos_job_def/nosana_mastra.json --market nvidia-3090 --timeout 30",
-    "deploy:qwen": "nosana job post --file ./nos_job_def/qwen_nos_jb.json --market nvidia-3090 --timeout 30",
+    "deploy:agent": "nosana job post --file ./nos_job_def/nosana_mastra.json --market nvidia-3090 --timeout 300",
+    "deploy:qwen": "nosana job post --file ./nos_job_def/qwen_nos_jb.json --market nvidia-3090 --timeout 300",
     "dev": "mastra dev",
     "build": "mastra build",
     "start": "mastra start",
@@ -24,6 +24,9 @@
   "engines": {
     "node": ">=20.9.0"
   },
+  "resolutions": {
+    "rollup": "4.44.2"
+  },
   "dependencies": {
     "@ai-sdk/openai": "^1.3.23",
     "@mastra/core": "^0.10.12",
@@ -36,6 +39,7 @@
     "dotenv": "17.0.1",
     "https-proxy-agent": "^7.0.6",
     "ollama-ai-provider": "^1.2.0",
+    "rollup": "4.44.2",
     "zod": "^3.25.76"
   },
   "devDependencies": {
