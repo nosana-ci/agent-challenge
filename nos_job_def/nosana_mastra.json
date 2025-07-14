@@ -4,7 +4,7 @@
       "id": "agents",
       "args": {
         "gpu": true,
-        "image": "docker.io/yourusername/agent-challenge:latest",
+        "image": "docker.io/kivanolai/mastra-nosama-solana-agent-challenge:latest",
         "expose": [
           {
             "port": 8080
