@@ -67,13 +67,13 @@ async function testPythPriceFeedsDiscovery() {
 		});
 		
 		// Find SOL/USD specifically
-		const solUsdFeeds = data.data ? data.data.filter(feed => 
+		const solUsdFeeds = feedsArray.filter(feed => 
 			feed.attributes &&
 			feed.attributes.base && 
 			feed.attributes.quote_currency &&
 			feed.attributes.base.toLowerCase() === 'sol' && 
 			feed.attributes.quote_currency.toLowerCase() === 'usd'
-		) : [];
+		);
 		
 		console.log(`💰 Found ${solUsdFeeds.length} SOL/USD feed(s):`);
 		
@@ -169,16 +169,17 @@ async function testMultipleQueries() {
 			const response = await fetch(url);
 			const data = await response.json();
 			
-			console.log(`   Found ${data.data?.length || 0} feeds`);
+			const feedsArray = Array.isArray(data) ? data : (data.data || []);
+			console.log(`   Found ${feedsArray.length} feeds`);
 			
 			// Show first few results
-			if (data.data && data.data.length > 0) {
-				const firstFew = data.data.slice(0, 3);
+			if (feedsArray.length > 0) {
+				const firstFew = feedsArray.slice(0, 3);
 				firstFew.forEach(feed => {
 					console.log(`   • ${feed.attributes.symbol} (${feed.attributes.base}/${feed.attributes.quote_currency})`);
 				});
-				if (data.data.length > 3) {
-					console.log(`   ... and ${data.data.length - 3} more`);
+				if (feedsArray.length > 3) {
+					console.log(`   ... and ${feedsArray.length - 3} more`);
 				}
 			}
 			
