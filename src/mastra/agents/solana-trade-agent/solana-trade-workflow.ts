@@ -1,119 +1,15 @@
 import { createStep, createWorkflow } from "@mastra/core/workflows";
 import { z } from "zod";
-import { twitterMonitorTool } from "./tools/twitter-monitor-tool";
-import { sentimentAnalysisTool } from "./tools/sentiment-analysis-tool";
-import { solanaMarketTool } from "./tools/solana-market-tool";
-import { tradingSignalTool } from "./tools/trading-signal-tool";
+import { solanaTradeComboTool } from "./tools/solana-trade-tool";
 
-// Step 1: Monitor social media for Solana-related content
-const monitorSocialMedia = createStep({
-	id: "monitor-social-media",
-	description: "Monitor Twitter accounts for Solana-related content",
+// Single comprehensive step using the consolidated tool
+const performComprehensiveAnalysis = createStep({
+	id: "comprehensive-solana-analysis",
+	description: "Perform comprehensive Solana trading analysis using integrated tool",
 	inputSchema: z.object({
 		accounts: z.array(z.string()).default(["elonmusk", "solana", "solanalabs"]),
-		keywords: z.array(z.string()).default(["solana", "sol", "blockchain", "crypto", "defi"]),
-	}),
-	outputSchema: z.object({
-		tweets: z.array(z.any()),
-		tweet_count: z.number(),
-		data_source: z.string(),
-	}),
-	execute: async ({ inputData }) => {
-		const result = await twitterMonitorTool.execute({
-			context: {
-				accounts: inputData.accounts,
-				keywords: inputData.keywords,
-			},
-		});
-		
-		return {
-			tweets: result.tweets,
-			tweet_count: result.count,
-			data_source: result.source,
-		};
-	},
-});
-
-// Step 2: Analyze sentiment of collected tweets
-const analyzeSentiment = createStep({
-	id: "analyze-sentiment",
-	description: "Analyze sentiment of collected tweets",
-	inputSchema: z.object({
-		tweets: z.array(z.any()),
-	}),
-	outputSchema: z.object({
-		sentiment_analysis: z.any(),
-	}),
-	execute: async ({ inputData }) => {
-		const result = await sentimentAnalysisTool.execute({
-			context: {
-				tweets: inputData.tweets,
-			},
-		});
-		
-		return {
-			sentiment_analysis: result,
-		};
-	},
-});
-
-// Step 3: Fetch current market data
-const fetchMarketData = createStep({
-	id: "fetch-market-data",
-	description: "Fetch current Solana market data",
-	inputSchema: z.object({}),
-	outputSchema: z.object({
-		market_data: z.any(),
-	}),
-	execute: async ({ inputData }) => {
-		const result = await solanaMarketTool.execute({
-			context: {},
-		});
-		
-		return {
-			market_data: result,
-		};
-	},
-});
-
-// Step 4: Generate trading signal
-const generateTradingSignal = createStep({
-	id: "generate-trading-signal",
-	description: "Generate trading signal based on sentiment and market data",
-	inputSchema: z.object({
-		sentiment_analysis: z.any(),
-		market_data: z.any(),
+		keywords: z.array(z.string()).default(["solana", "sol", "blockchain", "crypto"]),
 		risk_tolerance: z.enum(['low', 'medium', 'high']).default('medium'),
-	}),
-	outputSchema: z.object({
-		trading_signal: z.any(),
-	}),
-	execute: async ({ inputData }) => {
-		const result = await tradingSignalTool.execute({
-			context: {
-				sentiment_data: inputData.sentiment_analysis,
-				market_data: inputData.market_data,
-				risk_tolerance: inputData.risk_tolerance,
-			},
-		});
-		
-		return {
-			trading_signal: result,
-		};
-	},
-});
-
-// Step 5: Compile comprehensive analysis
-const compileAnalysis = createStep({
-	id: "compile-analysis",
-	description: "Compile comprehensive trading analysis",
-	inputSchema: z.object({
-		tweets: z.array(z.any()),
-		tweet_count: z.number(),
-		data_source: z.string(),
-		sentiment_analysis: z.any(),
-		market_data: z.any(),
-		trading_signal: z.any(),
 	}),
 	outputSchema: z.object({
 		comprehensive_analysis: z.object({
@@ -150,17 +46,25 @@ const compileAnalysis = createStep({
 		}),
 	}),
 	execute: async ({ inputData }) => {
+		// Use the consolidated tool to get all analysis data
+		const toolResult = await solanaTradeComboTool.execute({
+			context: {
+				accounts: inputData.accounts,
+				keywords: inputData.keywords,
+				risk_tolerance: inputData.risk_tolerance,
+			}
+		});
+		
+		// Extract data from tool result
 		const {
-			tweets,
-			tweet_count,
-			data_source,
+			twitter_data,
 			sentiment_analysis,
 			market_data,
 			trading_signal,
-		} = inputData;
+		} = toolResult;
 		
 		// Extract key influences from tweets
-		const keyInfluences = tweets
+		const keyInfluences = twitter_data.tweets
 			.sort((a: any, b: any) => 
 				(b.engagement.likes + b.engagement.retweets) - 
 				(a.engagement.likes + a.engagement.retweets)
@@ -176,7 +80,7 @@ const compileAnalysis = createStep({
 						  trading_signal.confidence > 0.6 ? 'Medium' : 'High';
 		
 		// Generate summary
-		const summary = `Based on analysis of ${tweet_count} tweets from ${data_source} and current market conditions, ` +
+		const summary = `Based on analysis of ${twitter_data.count} tweets from ${twitter_data.source} and current market conditions, ` +
 						`the overall sentiment is ${sentiment_analysis.overall_label} with ${(sentiment_analysis.confidence * 100).toFixed(1)}% confidence. ` +
 						`Market shows ${market_data.momentum_indicator} momentum with ${market_data.volume_signal} volume. ` +
 						`Recommendation: ${trading_signal.signal} with ${(trading_signal.confidence * 100).toFixed(1)}% confidence.`;
@@ -185,8 +89,8 @@ const compileAnalysis = createStep({
 			comprehensive_analysis: {
 				summary,
 				social_media_insights: {
-					tweets_analyzed: tweet_count,
-					data_source,
+					tweets_analyzed: twitter_data.count,
+					data_source: twitter_data.source,
 					overall_sentiment: sentiment_analysis.overall_label,
 					confidence: sentiment_analysis.confidence,
 					key_influences: keyInfluences,
@@ -218,7 +122,7 @@ const compileAnalysis = createStep({
 	},
 });
 
-// Create the main workflow
+// Create the simplified workflow using the consolidated tool
 export const solanaTradeWorkflow = createWorkflow({
 	id: "solana-trading-workflow",
 	inputSchema: z.object({
@@ -230,8 +134,4 @@ export const solanaTradeWorkflow = createWorkflow({
 		comprehensive_analysis: z.any(),
 	}),
 })
-.then(monitorSocialMedia)
-.then(analyzeSentiment)
-.then(fetchMarketData)
-.then(generateTradingSignal)
-.then(compileAnalysis);
+.then(performComprehensiveAnalysis);
