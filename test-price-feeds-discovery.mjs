@@ -26,20 +26,22 @@ async function testPythPriceFeedsDiscovery() {
 		
 		const data = await response.json();
 		
-		console.log(`✅ Successfully discovered ${data.data?.length || 0} price feeds\n`);
+		// The response is directly an array of feeds
+		const feedsArray = Array.isArray(data) ? data : (data.data || []);
+		
+		console.log(`✅ Successfully discovered ${feedsArray.length} price feeds\n`);
 		
 		// Check if data exists and log the response structure
 		console.log('📋 Response structure:');
-		console.log(`   Has data property: ${!!data.data}`);
-		console.log(`   Data type: ${typeof data.data}`);
-		console.log(`   Is array: ${Array.isArray(data.data)}`);
+		console.log(`   Response is array: ${Array.isArray(data)}`);
+		console.log(`   Feeds array length: ${feedsArray.length}`);
 		
-		if (data.data && data.data.length > 0) {
-			console.log(`   First item keys: ${Object.keys(data.data[0])}`);
+		if (feedsArray.length > 0) {
+			console.log(`   First item keys: ${Object.keys(feedsArray[0])}`);
 		}
 		
 		// If no data, show the full response for debugging
-		if (!data.data || data.data.length === 0) {
+		if (feedsArray.length === 0) {
 			console.log('\n🔍 Full response for debugging:');
 			console.log(JSON.stringify(data, null, 2));
 			
@@ -54,7 +56,7 @@ async function testPythPriceFeedsDiscovery() {
 		console.log('\n📊 Discovered Price Feeds:');
 		console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 		
-		data.data.forEach((feed, index) => {
+		feedsArray.forEach((feed, index) => {
 			console.log(`${index + 1}. ${feed.attributes.symbol}`);
 			console.log(`   ID: ${feed.id}`);
 			console.log(`   Base: ${feed.attributes.base}`);
