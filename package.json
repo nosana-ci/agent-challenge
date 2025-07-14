@@ -32,8 +32,9 @@
     "@mastra/memory": "0.11.1",
     "@mysten/deepbook-v3": "^0.15.5",
     "@mysten/sui": "^1.36.0",
-    "@pythnetwork/price-service-client": "^1.9.0",
+    "@pythnetwork/hermes-client": "^2.0.0",
     "dotenv": "17.0.1",
+    "https-proxy-agent": "^7.0.6",
     "ollama-ai-provider": "^1.2.0",
     "zod": "^3.25.76"
   },
