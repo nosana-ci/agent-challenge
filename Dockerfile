@@ -1,8 +1,12 @@
-FROM ollama/ollama:0.7.0
+FROM ollama/ollama:latest
+
+ENV API_BASE_URL=https://nos-dep-2.node.k8s.prd.nos.ci/qwen-3-8b-skea/api
+ENV MODEL_NAME_AT_ENDPOINT=qwen3:8b
 
 # Qwen2.5:1.5b - Docker
-ENV API_BASE_URL=http://127.0.0.1:11434/api
-ENV MODEL_NAME_AT_ENDPOINT=qwen2.5:1.5b
+# ENV API_BASE_URL=http://127.0.0.1:11434/api
+# ENV MODEL_NAME_AT_ENDPOINT=qwen2.5:1.5b
+
 
 # Qwen2.5:32b = Docker
 # ENV API_BASE_URL=http://127.0.0.1:11434/api
@@ -20,7 +24,7 @@ RUN apt-get update && apt-get install -y \
 WORKDIR /app
 
 # Copy package files
-# COPY .env.docker package.json pnpm-lock.yaml ./
+COPY .env.docker package.json pnpm-lock.yaml ./
 
 # Install dependencies
 RUN pnpm install
@@ -29,7 +33,7 @@ RUN pnpm install
 COPY . .
 
 # Build the project
-# RUN pnpm run build
+RUN pnpm run build
 
 # Override the default entrypoint
 ENTRYPOINT ["/bin/sh", "-c"]
