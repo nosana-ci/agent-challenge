@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "main": ".mastra/output/index.mjs",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "deploy:agent": "nosana job post --file ./nos_job_def/nosana_mastra.json --market nvidia-3090 --timeout 30",
-    "deploy:qwen": "nosana job post --file ./nos_job_def/qwen_nos_jb.json --market nvidia-3090 --timeout 30",
+    "test": "tsx tests/unified-test-suite.ts",
+    "test:simple": "node simple-test.mjs",
+    "test:pyth": "node test-pyth-integration.mjs",
+    "test:enhanced": "node test-enhanced-agent.mjs",
+    "deploy:agent": "nosana job post --file ./nos_job_def/nosana_mastra.json --market nvidia-3090 --timeout 300",
+    "deploy:qwen": "nosana job post --file ./nos_job_def/qwen_nos_jb.json --market nvidia-3090 --timeout 300",
     "dev": "mastra dev",
     "build": "mastra build",
     "start": "mastra start",
@@ -21,21 +24,33 @@
   "engines": {
     "node": ">=20.9.0"
   },
+  "resolutions": {
+    "rollup": "4.44.2"
+  },
   "dependencies": {
-    "@ai-sdk/openai": "^1.3.22",
-    "@mastra/core": "^0.10.5",
-    "@mastra/libsql": "^0.10.2",
-    "@mastra/loggers": "^0.10.2",
-    "@mastra/memory": "^0.10.3",
-    "dotenv": "^16.5.0",
+    "@ai-sdk/openai": "^1.3.23",
+    "@mastra/core": "^0.10.12",
+    "@mastra/libsql": "0.11.0",
+    "@mastra/loggers": "^0.10.3",
+    "@mastra/memory": "0.11.1",
+    "@mysten/deepbook-v3": "^0.15.5",
+    "@mysten/sui": "^1.36.0",
+    "@pythnetwork/hermes-client": "^2.0.0",
+    "bigint-buffer": "^1.1.5",
+    "dotenv": "17.0.1",
+    "https-proxy-agent": "^7.0.6",
     "ollama-ai-provider": "^1.2.0",
-    "zod": "^3.25.67"
+    "rollup": "4.44.2",
+    "zod": "^3.25.76"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.4",
-    "@nosana/cli": "^1.0.52",
-    "@types/node": "^24.0.3",
-    "mastra": "^0.10.5",
+    "@nosana/cli": "^1.0.59",
+    "@types/node": "^24.0.13",
+    "mastra": "^0.10.12",
+    "node-gyp": "^11.2.0",
+    "tsx": "^4.16.2",
     "typescript": "^5.8.3"
-  }
+  },
+  "postinstall": "cd node_modules/bigint-buffer && node-gyp configure && node-gyp build"
 }

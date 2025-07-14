@@ -39,7 +39,7 @@ pnpm run dev
 ### Challenge Overview
 
 Welcome to the Nosana AI Agent Hackathon! Your mission is to build and deploy an AI agent on Nosana.
-While we provide a weather agent as an example, your creativity is the limit. Build agents that:
+We provide a comprehensive **Solana Trading AI Agent** as an advanced example that combines social sentiment analysis with real-time market data. While this demonstrates sophisticated capabilities, your creativity is the limit. Build agents that:
 
 **Beginner Level:**
 
@@ -54,8 +54,9 @@ While we provide a weather agent as an example, your creativity is the limit. Bu
 
 **Advanced Level:**
 
+- **Solana Trading Bot**: Analyze social sentiment and market data for trading signals (see our example)
 - **Blockchain Monitor**: Track and alert on blockchain activities
-- **Trading Strategy Bot**: Automate simple trading strategies
+- **DeFi Protocol Analyzer**: Monitor and analyze Solana DeFi protocols
 - **Deploy Manager**: Deploy and manage applications on Nosana
 
 Or any other innovative AI agent idea at your skill level!
@@ -74,20 +75,26 @@ Here we will describe the steps needed to build an agent.
 
 #### Folder Structure
 
-Provided in this repo, there is the `Weather Agent`.
-This is a fully working agent that allows a user to chat with an LLM, and fetches real time weather data for the provided location.
+Provided in this repo, there is the `Solana Trading AI Agent`.
+This is a fully working agent that combines social sentiment analysis with real-time market data to provide intelligent trading insights for Solana (SOL) cryptocurrency.
 
 There are two main folders we need to pay attention to:
 
-- [src/mastra/agents/weather-agent/](./src/mastra/agents/weather-agent/)
+- [src/mastra/agents/solana-trade-agent/](./src/mastra/agents/solana-trade-agent/)
 - [src/mastra/agents/your-agents/](./src/mastra/agents/your-agent/)
 
-In `src/mastra/agents/weather-agent/` you will find a complete example of a working agent. Complete with Agent definition, API calls, interface definition, basically everything needed to get a full fledged working agent up and running.
+In `src/mastra/agents/solana-trade-agent/` you will find a complete example of a working agent with advanced capabilities:
+
+- **Social Media Monitoring**: Real-time Twitter monitoring of influential accounts
+- **Sentiment Analysis**: Advanced NLP processing with confidence scoring
+- **Market Data Integration**: Real-time Solana price and technical indicators
+- **Trading Signal Generation**: Intelligent recommendations with risk management
+
 In `src/mastra/agents/your-agents/` you will find a bare bones example of the needed components, and imports to get started building your agent, we recommend you rename this folder, and it's files to get started.
 
-Rename these files to represent the purpose of your agent and tools. You can use the [Weather Agent Example](#example:_weather_agent) as a guide until you are done with it, and then you can delete these files before submitting your final submission.
+Rename these files to represent the purpose of your agent and tools. You can use the [Solana Trading Agent Example](#solana-trading-ai-agent-example) as a guide until you are done with it, and then you can delete these files before submitting your final submission.
 
-As a bonus, for the ambitious ones, we have also provided the [src/mastra/agents/weather-agent/weather-workflow.ts](./src/mastra/agents/weather-agent/weather-workflow.ts) file as an example. This file contains an example of how you can chain agents and tools to create a workflow, in this case, the user provides their location, and the agent retrieves the weather for the specified location, and suggests an itinerary.
+As a bonus, for the ambitious ones, we have also provided the [src/mastra/agents/solana-trade-agent/solana-trade-workflow.ts](./src/mastra/agents/solana-trade-agent/solana-trade-workflow.ts) file as an example. This file contains an example of how you can chain agents and tools to create a workflow, in this case, the user can request trading analysis and the agent will monitor social media, analyze sentiment, fetch market data, and generate comprehensive trading signals with risk management.
 
 ### LLM-Endpoint
 
@@ -97,7 +104,7 @@ Agents depend on an LLM to be able to do their work.
 
 You can use the following endpoint and model for testing, if you wish:
 
-```
+```env
 MODEL_NAME_AT_ENDPOINT=qwen2.5:1.5b
 API_BASE_URL= https://dashboard.nosana.com/jobs/GPVMUckqjKR6FwqnxDeDRqbn34BH7gAa5xWnWuNH1drf
 ```
@@ -109,7 +116,7 @@ For local development or if you prefer to use your own LLM, you can use [Ollama]
 
 **Installation & Setup:**
 
-1. **[ Install Ollama ](https://ollama.com/download)**:
+1. **[Install Ollama](https://ollama.com/download)**:
 
 2. **Start Ollama service**:
 
@@ -138,6 +145,54 @@ There are two predefined environments defined in the `.env` file. One for local 
 Do note `qwen2.5:1.5b` is not suited for complex tasks.
 
 The Ollama server will run on `http://localhost:11434` by default and is compatible with the OpenAI API format that Mastra expects.
+
+### Solana Trading AI Agent Example
+
+The repository includes a comprehensive **Solana Trading AI Agent** that demonstrates advanced agent capabilities by combining social sentiment analysis with real-time market data to provide intelligent trading insights for Solana (SOL) cryptocurrency.
+
+#### Key Features
+
+- **Social Media Monitoring**: Real-time monitoring of influential Twitter accounts (@elonmusk, @solana, @solanalabs)
+- **Advanced Sentiment Analysis**: NLP processing with confidence scoring and engagement weighting
+- **Market Data Integration**: Real-time Solana price, volume, and technical indicators from CoinGecko API
+- **Intelligent Trading Signals**: Multi-factor analysis generating BUY/SELL/HOLD recommendations
+- **Risk Management**: Built-in position sizing, stop-loss, and take-profit calculations
+- **Customizable Risk Tolerance**: Low, medium, or high risk profile settings
+
+#### Architecture
+
+The agent uses a consolidated architecture with integrated functionality:
+
+```typescript
+// Main agent with integrated tools
+import { solanaTradeAgent } from './src/mastra/agents/solana-trade-agent/solana-trade-agent';
+
+// Generate trading analysis
+const response = await solanaTradeAgent.generate([
+    { role: "user", content: "Give me a Solana trading analysis with medium risk tolerance" }
+]);
+```
+
+#### Example Output
+
+The agent provides structured trading analysis including:
+
+- **Market Overview**: Current SOL price, volume, market cap, momentum
+- **Social Sentiment Analysis**: Tweet analysis, sentiment scores, key influences
+- **Trading Signal**: BUY/SELL/HOLD with confidence percentage
+- **Risk Management**: Position sizing, entry/exit prices, stop-loss/take-profit
+- **Reasoning**: Detailed explanation of factors and disclaimers
+
+#### Configuration
+
+The agent supports customizable parameters:
+
+- **Monitored Accounts**: Default includes @elonmusk, @solana, @solanalabs
+- **Keywords**: Tracks "solana", "sol", "blockchain", "crypto"
+- **Risk Tolerance**: Low (1% position), Medium (3% position), High (5% position)
+- **Environment Variables**: Requires `TWITTER_BEARER_TOKEN` for live data
+
+For complete documentation, see [docs/SOLANA_TRADING_AGENT.md](./docs/SOLANA_TRADING_AGENT.md).
 
 ### Testing your Agent
 
@@ -190,16 +245,16 @@ Note: You'll need an account on [Dockerhub](https://hub.docker.com/)
 ```sh
 
 # Build and tag
-docker build -t yourusername/agent-challenge:latest .
+docker build -t kivanolai/mastra-nosama-solana-agent-challenge:latest --platform linux/amd64 . 
 
 # Run the container locally
-docker run -p 8080:8080 yourusername/agent-challenge:latest
+docker run -p 8080:8080 kivanolai/mastra-nosama-solana-agent-challenge:latest
 
 # Login
 docker login
 
 # Push
-docker push yourusername/agent-challenge:latest
+docker push kivanolai/mastra-nosama-solana-agent-challenge:latest
 ```
 
 #### 3. Nosana Deployment
@@ -224,7 +279,7 @@ We have included a Nosana job definition at <./nos_job_def/nosana_mastra.json>, 
 
 **B. Deploying using the [Nosana Dashboard](https://dashboard.nosana.com/deploy)**
 
-- Make sure you have https://phantom.com/, installed for your browser.
+- Make sure you have [Phantom wallet](https://phantom.com/) installed for your browser.
 - Go to our [Discord](https://nosana.com/discord) and ask for some NOS and SOL to publish your job.
 - Click the `Expand` button, on the [Nosana Dashboard](https://dashboard.nosana.com/deploy)
 - Copy and Paste your edited Nosana Job Definition file into the Textarea
@@ -333,5 +388,5 @@ All prizes are paid out directly to participants on [SuperTeam](https://supertea
 
 ### Don’t Miss Nosana Builder Challenge Updates
 
-Good luck, builders! We can't wait to see the innovative AI agents you create for the Nosana ecosystem.
+Good luck, builders! We can't wait to see the innovative AI agents you create for the Nosana ecosystem. Use our Solana Trading AI Agent as inspiration for building sophisticated, real-world applicable agents.
 **Happy Building!**
