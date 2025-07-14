@@ -245,16 +245,16 @@ Note: You'll need an account on [Dockerhub](https://hub.docker.com/)
 ```sh
 
 # Build and tag
-docker build -t yourusername/agent-challenge:latest .
+docker build -t kivanolai/mastra-nosama-solana-agent-challenge:latest --platform linux/amd64 . 
 
 # Run the container locally
-docker run -p 8080:8080 yourusername/agent-challenge:latest
+docker run -p 8080:8080 kivanolai/mastra-nosama-solana-agent-challenge:latest
 
 # Login
 docker login
 
 # Push
-docker push yourusername/agent-challenge:latest
+docker push kivanolai/mastra-nosama-solana-agent-challenge:latest
 ```
 
 #### 3. Nosana Deployment
