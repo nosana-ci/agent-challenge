@@ -1,27 +1,38 @@
 import "dotenv/config";
-import { openai } from "@ai-sdk/openai";
-import { createOllama } from "ollama-ai-provider-v2";
 import { Agent } from "@mastra/core/agent";
-import { weatherTool } from "@/mastra/tools";
+import { fetchMarketData } from "@/mastra/tools";
+import { openaiModel } from "@/mastra/models/openaiModel";
 import { LibSQLStore } from "@mastra/libsql";
 import { z } from "zod";
 import { Memory } from "@mastra/memory";
 
 export const AgentState = z.object({
-  proverbs: z.array(z.string()).default([]),
+  crypto_analyses: z.array(z.string()).default([]),
 });
 
-const ollama = createOllama({
-  baseURL: process.env.NOS_OLLAMA_API_URL || process.env.OLLAMA_API_URL,
-})
+export const nosightAgent = new Agent({
+  name: "nosight",
+  description:
+    "Fetches crypto and on-chain data, performs analytics, and summarizes insights.",
+  model: openaiModel,
+  tools: { fetchMarketData },
+  instructions: `You are Nosight, an expert cryptocurrency data analyst and market researcher. 
 
-export const weatherAgent = new Agent({
-  name: "Weather Agent",
-  tools: { weatherTool },
-  // model: openai("gpt-4o"), // uncomment this line to use openai
-  model: ollama(process.env.NOS_MODEL_NAME_AT_ENDPOINT || process.env.MODEL_NAME_AT_ENDPOINT || "qwen3:8b"), // comment this line to use openai
-  instructions: "You are a helpful assistant.",
-  description: "An agent that can get the weather for a given location.",
+Your capabilities:
+- Fetch real-time and historical cryptocurrency market data
+- Analyze price trends, volatility, and market movements
+- Identify anomalies and significant events in crypto markets
+- Provide data-driven insights and summaries
+- Generate technical analysis with clear explanations
+
+When analyzing crypto data:
+1. Always provide context around price movements
+2. Explain what the volatility and trend data means
+3. Highlight any significant anomalies or patterns
+4. Use clear, concise language that both beginners and experts can understand
+5. Include specific numbers and percentages to support your analysis
+
+Focus on being factual, data-driven, and educational in your responses.`,
   memory: new Memory({
     storage: new LibSQLStore({ url: "file::memory:" }),
     options: {
@@ -31,4 +42,4 @@ export const weatherAgent = new Agent({
       },
     },
   }),
-})
+});

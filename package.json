@@ -31,6 +31,7 @@
     "libsql": "^0.5.22",
     "mastra": "0.13.4",
     "next": ">=15.5.4",
+    "ollama": "^0.6.0",
     "ollama-ai-provider-v2": "^1.5.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

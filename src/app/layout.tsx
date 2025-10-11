@@ -26,8 +26,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <CopilotKit runtimeUrl="/api/copilotkit" agent="weatherAgent">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
+        <CopilotKit
+          publicApiKey="ck_pub_aaf36e66c73bb2a04f2e0300e8c89a49"
+          runtimeUrl="/api/copilotkit"
+          agent="nosightAgent"
+        >
           {children}
         </CopilotKit>
       </body>

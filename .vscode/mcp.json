@@ -1,0 +1,14 @@
+{
+  "servers": {
+    "mastra": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@mastra/mcp-docs-server"]
+    },
+    "my-mcp-server-06719165": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@mastra/mcp-docs-server"]
+    }
+  }
+}
