@@ -35,7 +35,7 @@ export default function PriceChart({
   const timeframes: Array<"1D" | "7D" | "30D"> = ["1D", "7D", "30D"];
 
   // Custom tooltip
-  const CustomTooltip = ({ active, payload }: unknown) => {
+  const CustomTooltip = ({ active, payload }: { active: boolean; payload: any[] }) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-slate-900 border border-[#10E80C]/50 rounded-lg p-3 shadow-xl">
