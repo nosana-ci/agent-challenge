@@ -5,7 +5,8 @@ import { useState } from "react";
 import { AgentState as AgentStateSchema } from "@/mastra/agents";
 import { z } from "zod";
 import { FaCirclePlus } from "react-icons/fa6";
-import DashboardHeader from "@/components/dashboard/DashboardHeader";
+import Sidebar from "@/components/layout/Sidebar";
+import BackgroundEffects from "@/components/ui/BackgroundEffects";
 import QueryInput from "@/components/dashboard/QueryInput";
 import MarketStatsCard from "@/components/dashboard/MarketStatsCard";
 import NetworkStatsCard from "@/components/dashboard/NetworkStatsCard";
@@ -20,7 +21,6 @@ import CorrelationMatrix from "@/components/charts/CorrelationMatrix";
 import ExportReport from "@/components/reports/ExportReport";
 import DeepAnalysisMode from "@/components/analysis/DeepAnalysisMode";
 import SmartExplanations from "@/components/analysis/SmartExplanations";
-import BackgroundEffects from "@/components/ui/BackgroundEffects";
 import type {
   MarketData,
   NetworkStats,
@@ -232,87 +232,156 @@ export default function NosightDashboard() {
   });
 
   return (
-    <div className="min-h-screen bg-black relative">
+    <div className="min-h-screen bg-black relative flex">
       <BackgroundEffects />
-      <DashboardHeader userName="Builder" />
 
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 relative z-10">
-        {/* Query Input Section */}
-        <QueryInput onAnalyze={handleAnalyze} isAnalyzing={isAnalyzing} />
+      {/* Sidebar */}
+      <Sidebar userName="Builder" />
 
-        {/* Stats Cards Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
-          <MarketStatsCard data={marketData} />
-          <NetworkStatsCard stats={networkStats} />
-          <SentimentCard sentiment={sentiment} />
-        </div>
+      {/* Main Content */}
+      <div className="flex-1 ml-64 transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 relative z-10">
+          {/* Dashboard Section */}
+          <div id="dashboard" className="scroll-mt-8">
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold gradient-text neon-glow-sm mb-2">
+                Dashboard
+              </h2>
+              <p className="text-slate-400">
+                Real-time market intelligence and analytics
+              </p>
+            </div>
 
-        {/* Enhanced Analysis Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-          <div className="lg:col-span-2">
-            <ExecutiveSummary analysis={enhancedAnalysis} />
+            {/* Query Input Section */}
+            <QueryInput onAnalyze={handleAnalyze} isAnalyzing={isAnalyzing} />
+
+            {/* Stats Cards Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 my-8">
+              <MarketStatsCard data={marketData} />
+              <NetworkStatsCard stats={networkStats} />
+              <SentimentCard sentiment={sentiment} />
+            </div>
           </div>
-          <div>
-            <RiskScoreCard riskScore={enhancedAnalysis.riskScore} />
+
+          {/* Analysis Section */}
+          <div id="analysis" className="scroll-mt-8">
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold gradient-text neon-glow-sm mb-2">
+                Analysis
+              </h2>
+              <p className="text-slate-400">
+                Comprehensive market analysis and insights
+              </p>
+            </div>
+
+            {/* Enhanced Analysis Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+              <div className="lg:col-span-2">
+                <ExecutiveSummary analysis={enhancedAnalysis} />
+              </div>
+              <div>
+                <RiskScoreCard riskScore={enhancedAnalysis.riskScore} />
+              </div>
+            </div>
+
+            {/* Live Analysis Panel */}
+            <div className="mb-8">
+              <LiveAnalysisPanel
+                analyses={analyses}
+                enhancedAnalysis={enhancedAnalysis}
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Live Analysis Panel */}
-        <div className="mb-8">
-          <LiveAnalysisPanel
-            analyses={analyses}
-            enhancedAnalysis={enhancedAnalysis}
-          />
-        </div>
+          {/* Charts Section */}
+          <div id="charts" className="scroll-mt-8">
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold gradient-text neon-glow-sm mb-2">
+                Charts
+              </h2>
+              <p className="text-slate-400">Visual market data and trends</p>
+            </div>
 
-        {/* Price Chart */}
-        <PriceChart
-          data={chartData}
-          title="NOS Price Chart (7D)"
-          timeframe={timeframe}
-          onTimeframeChange={setTimeframe}
-        />
+            {/* Price Chart */}
+            <PriceChart
+              data={chartData}
+              title="NOS Price Chart (7D)"
+              timeframe={timeframe}
+              onTimeframeChange={setTimeframe}
+            />
 
-        {/* Additional Charts Section */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
-          <PortfolioDistribution data={portfolioData} />
-          <MarketHeatmap data={heatmapData} />
-        </div>
+            {/* Additional Charts Section */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+              <PortfolioDistribution data={portfolioData} />
+              <MarketHeatmap data={heatmapData} />
+            </div>
 
-        {/* Correlation Matrix */}
-        <div className="mt-8">
-          <CorrelationMatrix
-            assets={correlationAssets}
-            matrix={correlationMatrix}
-          />
-        </div>
+            {/* Correlation Matrix */}
+            <div className="mt-8">
+              <CorrelationMatrix
+                assets={correlationAssets}
+                matrix={correlationMatrix}
+              />
+            </div>
+          </div>
 
-        {/* Deep Analysis Mode */}
-        <div className="mt-8">
-          <DeepAnalysisMode asset={marketData.symbol} />
-        </div>
+          {/* Portfolio Section */}
+          <div id="portfolio" className="scroll-mt-8">
+            <div className="mb-8 mt-12">
+              <h2 className="text-3xl font-bold gradient-text neon-glow-sm mb-2">
+                Portfolio
+              </h2>
+              <p className="text-slate-400">
+                Track your crypto holdings and performance
+              </p>
+            </div>
 
-        {/* Smart Explanations */}
-        <div className="mt-8">
-          <SmartExplanations />
-        </div>
+            {/* Deep Analysis Mode */}
+            <DeepAnalysisMode asset={marketData.symbol} />
+          </div>
 
-        {/* Export Report Section */}
-        <div className="mt-8">
-          <ExportReport analysis={enhancedAnalysis} />
-        </div>
+          {/* Alerts Section (Placeholder) */}
+          <div id="alerts" className="scroll-mt-8">
+            <div className="mb-8 mt-12">
+              <h2 className="text-3xl font-bold gradient-text neon-glow-sm mb-2">
+                Alerts
+              </h2>
+              <p className="text-slate-400">
+                Set up custom price alerts and notifications
+              </p>
+            </div>
 
-        {/* Footer */}
-        <div className="text-center text-slate-500 text-sm mt-8 pb-4">
-          <p>
-            Built for the{" "}
-            <span className="text-[[#10E80C]] font-semibold">
-              Nosana Builders Challenge
-            </span>
-          </p>
-          <p className="text-xs mt-1">
-            Powered by Mastra AI • Real-time Market Intelligence
-          </p>
+            {/* Smart Explanations */}
+            <SmartExplanations />
+          </div>
+
+          {/* History Section */}
+          <div id="history" className="scroll-mt-8">
+            <div className="mb-8 mt-12">
+              <h2 className="text-3xl font-bold gradient-text neon-glow-sm mb-2">
+                History
+              </h2>
+              <p className="text-slate-400">
+                View your analysis history and reports
+              </p>
+            </div>
+
+            {/* Export Report Section */}
+            <ExportReport analysis={enhancedAnalysis} />
+          </div>
+
+          {/* Footer */}
+          <div className="text-center text-slate-500 text-sm mt-16 pb-8">
+            <p>
+              Built for the{" "}
+              <span className="text-[#10E80C] font-semibold">
+                Nosana Builders Challenge
+              </span>
+            </p>
+            <p className="text-xs mt-1">
+              Powered by Mastra AI • Real-time Market Intelligence
+            </p>
+          </div>
         </div>
       </div>
     </div>
