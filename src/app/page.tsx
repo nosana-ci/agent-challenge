@@ -17,7 +17,6 @@ import PortfolioDistribution from "@/components/charts/PortfolioDistribution";
 import MarketHeatmap from "@/components/charts/MarketHeatmap";
 import CorrelationMatrix from "@/components/charts/CorrelationMatrix";
 import ExportReport from "@/components/reports/ExportReport";
-import AssetComparison from "@/components/analysis/AssetComparison";
 import DeepAnalysisMode from "@/components/analysis/DeepAnalysisMode";
 import SmartExplanations from "@/components/analysis/SmartExplanations";
 import type {
@@ -105,45 +104,7 @@ export default function NosightDashboard() {
     [0.58, 0.74, 0.81, 1.0],
   ];
 
-  // Asset comparison mock data
-  const comparisonAssets = [
-    {
-      asset: "NOS",
-      price: 2.45,
-      change24h: 12.5,
-      volume: "$2.3M",
-      marketCap: "$45.2M",
-      rsi: 68.5,
-      sentiment: "bullish" as const,
-    },
-    {
-      asset: "BTC",
-      price: 45123.5,
-      change24h: 3.2,
-      volume: "$45.2B",
-      marketCap: "$880B",
-      rsi: 62.3,
-      sentiment: "bullish" as const,
-    },
-    {
-      asset: "ETH",
-      price: 2456.78,
-      change24h: -1.8,
-      volume: "$22.1B",
-      marketCap: "$295B",
-      rsi: 48.7,
-      sentiment: "neutral" as const,
-    },
-    {
-      asset: "SOL",
-      price: 98.65,
-      change24h: 8.7,
-      volume: "$3.8B",
-      marketCap: "$42B",
-      rsi: 71.2,
-      sentiment: "bullish" as const,
-    },
-  ];
+
 
   // Enhanced analysis mock data
   const enhancedAnalysis: EnhancedAnalysisResult = {
@@ -316,10 +277,7 @@ export default function NosightDashboard() {
           />
         </div>
 
-        {/* Asset Comparison */}
-        <div className="mt-8">
-          <AssetComparison assets={comparisonAssets} />
-        </div>
+    
 
         {/* Deep Analysis Mode */}
         <div className="mt-8">

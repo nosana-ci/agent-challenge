@@ -183,7 +183,7 @@ export default function ExportReport({ analysis }: ExportReportProps) {
       <div className="flex flex-col sm:flex-row gap-4">
         <button
           onClick={exportToCSV}
-          className="flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 hover:from-teal-500 hover:to-cyan-500 text-white font-semibold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+          className="flex-1  text-white font-semibold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
         >
           <Download className="h-5 w-5" />
           <span>Export as CSV</span>
@@ -191,7 +191,7 @@ export default function ExportReport({ analysis }: ExportReportProps) {
 
         <button
           onClick={exportToPDF}
-          className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white font-semibold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+          className="flex-1  text-white font-semibold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
         >
           <FileText className="h-5 w-5" />
           <span>Export as PDF</span>
