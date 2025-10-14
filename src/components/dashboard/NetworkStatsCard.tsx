@@ -8,31 +8,32 @@ interface NetworkStatsCardProps {
 
 export default function NetworkStatsCard({ stats }: NetworkStatsCardProps) {
   return (
-    <div
-      className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-xl p-6
-                  hover:border-cyan-500/30 transition-all hover:shadow-xl hover:shadow-cyan-500/10"
-    >
-      <h3 className="text-slate-400 text-sm mb-4 font-medium">Network Stats</h3>
+    <div className="glass-dark card-glow hover-lift rounded-xl p-6 relative overflow-hidden">
+      <div className="shimmer absolute inset-0" />
 
-      <div className="space-y-3">
-        <div className="flex justify-between items-center p-3 bg-slate-700/30 rounded-lg">
+      <h3 className="text-slate-400 text-sm mb-4 font-medium relative z-10">
+        Network Stats
+      </h3>
+
+      <div className="space-y-3 relative z-10">
+        <div className="flex justify-between items-center p-3 glass rounded-lg hover:bg-[#10E80C]/10 transition-all">
           <span className="text-slate-300 text-sm">Active Nodes</span>
-          <span className="text-white font-bold text-lg">
+          <span className="text-white font-bold text-lg count-up">
             {stats.activeNodes}
           </span>
         </div>
 
-        <div className="flex justify-between items-center p-3 bg-slate-700/30 rounded-lg">
+        <div className="flex justify-between items-center p-3 glass rounded-lg hover:bg-[#10E80C]/10 transition-all">
           <span className="text-slate-300 text-sm">Jobs/Day</span>
-          <span className="text-white font-bold text-lg">
+          <span className="text-white font-bold text-lg count-up">
             {stats.jobsPerDay}
           </span>
         </div>
 
         {stats.utilizationRate !== undefined && (
-          <div className="flex justify-between items-center p-3 bg-slate-700/30 rounded-lg">
+          <div className="flex justify-between items-center p-3 glass rounded-lg hover:bg-[#10E80C]/10 transition-all">
             <span className="text-slate-300 text-sm">Utilization</span>
-            <span className="text-cyan-400 font-bold text-lg">
+            <span className="text-[#10E80C] font-bold text-lg neon-glow-sm count-up">
               {stats.utilizationRate}%
             </span>
           </div>

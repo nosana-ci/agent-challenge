@@ -31,13 +31,17 @@ export default function ExecutiveSummary({ analysis }: ExecutiveSummaryProps) {
   };
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6 shadow-xl">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="text-xl font-bold text-white">Executive Summary</h3>
+    <div className="glass-dark card-glow hover-lift rounded-2xl p-6 shadow-xl relative overflow-hidden">
+      <div className="shimmer absolute inset-0" />
+
+      <div className="flex items-center justify-between mb-4 relative z-10">
+        <h3 className="text-xl font-bold text-white gradient-text">
+          Executive Summary
+        </h3>
 
         {/* Sentiment Badge */}
         <div
-          className={`px-4 py-2 rounded-full bg-gradient-to-r ${getSentimentColor()} text-white font-semibold flex items-center gap-2`}
+          className={`px-4 py-2 rounded-full bg-gradient-to-r ${getSentimentColor()} text-white font-semibold flex items-center gap-2 neon-border`}
         >
           <span>{getSentimentIcon()}</span>
           <span className="capitalize">
@@ -47,30 +51,30 @@ export default function ExecutiveSummary({ analysis }: ExecutiveSummaryProps) {
       </div>
 
       {/* Confidence Bar */}
-      <div className="mb-6">
+      <div className="mb-6 relative z-10">
         <div className="flex justify-between text-sm mb-2">
           <span className="text-slate-400">Confidence Level</span>
-          <span className="text-white font-semibold">
+          <span className="text-white font-semibold count-up">
             {Math.round(analysis.executiveSummary.confidence * 100)}%
           </span>
         </div>
-        <div className="w-full bg-slate-700 rounded-full h-2">
+        <div className="w-full glass rounded-full h-3">
           <div
-            className="bg-gradient-to-r from-teal-500 to-cyan-500 h-2 rounded-full transition-all duration-500"
+            className="bg-gradient-to-r from-[#10E80C] to-[#0abf08] h-3 rounded-full transition-all duration-500 neon-border"
             style={{ width: `${analysis.executiveSummary.confidence * 100}%` }}
           />
         </div>
       </div>
 
       {/* Key Points */}
-      <div className="space-y-3">
+      <div className="space-y-3 relative z-10">
         {analysis.executiveSummary.bullets.map((bullet, index) => (
           <div
             key={index}
-            className="flex items-start gap-3 p-3 bg-slate-700/30 rounded-lg hover:bg-slate-700/50 transition-all"
+            className="flex items-start gap-3 p-3 glass rounded-lg hover:bg-[#10E80C]/10 transition-all hover-lift"
           >
-            <div className="w-6 h-6 rounded-full bg-gradient-to-r from-teal-500 to-cyan-600 flex items-center justify-center flex-shrink-0 mt-0.5">
-              <span className="text-white text-xs font-bold">{index + 1}</span>
+            <div className="w-6 h-6 rounded-full bg-gradient-to-r from-[#10E80C] to-[#0CAF09] flex items-center justify-center flex-shrink-0 mt-0.5 neon-border">
+              <span className="text-black text-xs font-bold">{index + 1}</span>
             </div>
             <p className="text-slate-300 leading-relaxed">{bullet}</p>
           </div>

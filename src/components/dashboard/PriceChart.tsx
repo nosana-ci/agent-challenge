@@ -40,7 +40,7 @@ export default function PriceChart({
   const CustomTooltip = ({ active, payload }: any) => {
     if (active && payload && payload.length) {
       return (
-        <div className="bg-slate-900 border border-teal-500/50 rounded-lg p-3 shadow-xl">
+        <div className="bg-slate-900 border border-[#10E80C]/50 rounded-lg p-3 shadow-xl">
           <p className="text-slate-400 text-xs mb-1">
             {payload[0].payload.day}
           </p>
@@ -54,25 +54,29 @@ export default function PriceChart({
   };
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6 shadow-xl">
-      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4">
+    <div className="glass-dark card-glow hover-lift rounded-2xl p-6 shadow-xl relative overflow-hidden">
+      <div className="shimmer absolute inset-0" />
+
+      <div className="flex flex-col md:flex-row md:items-center justify-between mb-6 gap-4 relative z-10">
         <div className="flex items-center gap-2">
           <span className="text-xl">
             <FaChartLine />
           </span>
-          <h2 className="text-xl font-bold text-white">{title}</h2>
+          <h2 className="text-xl font-bold text-white gradient-text">
+            {title}
+          </h2>
         </div>
 
         {/* Timeframe Selector */}
-        <div className="flex gap-2 bg-slate-700/50 p-1 rounded-lg">
+        <div className="flex gap-2 glass p-1 rounded-lg">
           {timeframes.map((tf) => (
             <button
               key={tf}
               onClick={() => onTimeframeChange?.(tf)}
               className={`px-4 py-2 rounded-md text-sm font-medium transition-all ${
                 timeframe === tf
-                  ? "bg-gradient-to-r from-teal-500 to-cyan-600 text-white shadow-lg"
-                  : "text-slate-400 hover:text-white hover:bg-slate-600/50"
+                  ? "bg-gradient-to-r from-[#10E80C] to-[#0CAF09] text-black shadow-lg neon-border font-bold"
+                  : "text-slate-400 hover:text-[#10E80C] hover:bg-[#10E80C]/10"
               }`}
             >
               {tf}
@@ -82,7 +86,7 @@ export default function PriceChart({
       </div>
 
       {/* Recharts Area Chart */}
-      <div className="h-80 w-full">
+      <div className="h-80 w-full relative z-10">
         <ResponsiveContainer width="100%" height="100%">
           <AreaChart
             data={data}
@@ -90,8 +94,8 @@ export default function PriceChart({
           >
             <defs>
               <linearGradient id="colorValue" x1="0" y1="0" x2="0" y2="1">
-                <stop offset="5%" stopColor="#14b8a6" stopOpacity={0.8} />
-                <stop offset="95%" stopColor="#06b6d4" stopOpacity={0.1} />
+                <stop offset="5%" stopColor="#10E80C" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#10E80C" stopOpacity={0.1} />
               </linearGradient>
             </defs>
             <CartesianGrid
@@ -115,7 +119,7 @@ export default function PriceChart({
             <Area
               type="monotone"
               dataKey="value"
-              stroke="#14b8a6"
+              stroke="#10E80C"
               strokeWidth={3}
               fillOpacity={1}
               fill="url(#colorValue)"

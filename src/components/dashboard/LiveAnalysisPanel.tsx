@@ -93,10 +93,11 @@ export default function LiveAnalysisPanel({
       {/* Enhanced Analysis - Technical Indicators */}
       {enhancedAnalysis && enhancedAnalysis.status === "complete" && (
         <>
-          <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6 shadow-xl">
-            <div className="flex items-center gap-2 mb-4">
-              <Activity className="h-5 w-5 text-cyan-400" />
-              <h3 className="text-lg font-semibold text-white">
+          <div className="glass-dark card-glow hover-lift rounded-2xl p-6 shadow-xl relative overflow-hidden">
+            <div className="shimmer absolute inset-0" />
+            <div className="flex items-center gap-2 mb-4 relative z-10">
+              <Activity className="h-5 w-5 text-[#10E80C] pulse-glow" />
+              <h3 className="text-lg font-semibold text-white gradient-text">
                 Technical Indicators
               </h3>
             </div>
@@ -250,7 +251,7 @@ export default function LiveAnalysisPanel({
                         <p className="text-sm text-slate-300 mb-2">
                           {signal.description}
                         </p>
-                        <div className="flex items-center gap-2 text-sm font-medium text-cyan-400">
+                        <div className="flex items-center gap-2 text-sm font-medium text-[#10E80C]">
                           <Lightbulb className="h-4 w-4" />
                           <span>{signal.action}</span>
                         </div>
@@ -286,7 +287,7 @@ export default function LiveAnalysisPanel({
                   >
                     <div className="p-2 rounded-lg bg-slate-800/50">
                       {anomaly.type === "volume_spike" ? (
-                        <BarChart3 className="h-6 w-6 text-cyan-400" />
+                        <BarChart3 className="h-6 w-6 text-[#10E80C]" />
                       ) : anomaly.type === "price_surge" ? (
                         <Rocket className="h-6 w-6 text-green-400" />
                       ) : anomaly.type === "price_crash" ? (
@@ -330,12 +331,12 @@ export default function LiveAnalysisPanel({
       <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6 shadow-xl">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
-            <TrendingUp className="h-6 w-6 text-cyan-400" />
+            <TrendingUp className="h-6 w-6 text-[#10E80C]" />
             <h2 className="text-xl font-bold text-white">Live Analysis</h2>
           </div>
           {latestAnalysis?.status === "analyzing" && (
-            <div className="flex items-center gap-2 text-teal-400 text-sm">
-              <div className="w-2 h-2 bg-teal-400 rounded-full animate-pulse"></div>
+            <div className="flex items-center gap-2 text-[#10E80C] text-sm">
+              <div className="w-2 h-2 bg-[#10E80C] rounded-full animate-pulse"></div>
               <span>Analyzing...</span>
             </div>
           )}
@@ -366,7 +367,7 @@ export default function LiveAnalysisPanel({
             {/* Key Findings */}
             {latestAnalysis.findings && latestAnalysis.findings.length > 0 && (
               <div className="bg-slate-700/30 rounded-xl p-4 mb-4 border border-slate-600/30">
-                <div className="text-teal-400 font-semibold mb-3 flex items-center gap-2">
+                <div className="text-[#10E80C] font-semibold mb-3 flex items-center gap-2">
                   <BarChart3 className="h-5 w-5" />
                   <span>Key Findings:</span>
                 </div>
@@ -376,7 +377,7 @@ export default function LiveAnalysisPanel({
                       key={idx}
                       className="flex items-start gap-2 text-slate-300"
                     >
-                      <span className="text-teal-400 mt-1">•</span>
+                      <span className="text-[#10E80C] mt-1">•</span>
                       <span>{finding}</span>
                     </li>
                   ))}
@@ -386,8 +387,8 @@ export default function LiveAnalysisPanel({
 
             {/* Insight */}
             {latestAnalysis.insight && latestAnalysis.status === "complete" && (
-              <div className="bg-gradient-to-r from-teal-900/30 to-cyan-900/30 border border-teal-700/30 rounded-xl p-4 mb-4">
-                <div className="text-teal-300 font-semibold mb-2 flex items-center gap-2">
+              <div className="bg-gradient-to-r from-[#064D04]/30 to-[#064D04]/30 border border-[#0A8A07]/30 rounded-xl p-4 mb-4">
+                <div className="text-[#1AFF15] font-semibold mb-2 flex items-center gap-2">
                   <Lightbulb className="h-5 w-5" />
                   <span>Insight:</span>
                 </div>

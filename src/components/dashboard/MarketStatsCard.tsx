@@ -10,19 +10,20 @@ export default function MarketStatsCard({ data }: MarketStatsCardProps) {
   const isPositive = data.change24h > 0;
 
   return (
-    <div
-      className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-xl p-6 
-                  hover:border-teal-500/30 transition-all group hover:shadow-xl hover:shadow-teal-500/10"
-    >
-      <h3 className="text-slate-400 text-sm mb-3 font-medium">{data.name}</h3>
+    <div className="glass-dark card-glow hover-lift rounded-xl p-6 group relative overflow-hidden">
+      <div className="shimmer absolute inset-0" />
 
-      <div className="text-3xl font-bold text-white mb-2 group-hover:text-teal-400 transition-colors">
+      <h3 className="text-slate-400 text-sm mb-3 font-medium relative z-10">
+        {data.name}
+      </h3>
+
+      <div className="text-3xl font-bold text-white mb-2 group-hover:neon-glow-sm transition-all count-up relative z-10">
         ${data.price.toFixed(2)}
       </div>
 
       <div
-        className={`flex items-center gap-2 mb-3 text-lg font-semibold ${
-          isPositive ? "text-green-400" : "text-red-400"
+        className={`flex items-center gap-2 mb-3 text-lg font-semibold relative z-10 ${
+          isPositive ? "text-[#10E80C]" : "text-red-400"
         }`}
       >
         <span className="text-xl">{isPositive ? "↗" : "↘"}</span>
@@ -32,10 +33,12 @@ export default function MarketStatsCard({ data }: MarketStatsCardProps) {
         </span>
       </div>
 
-      <div className="text-slate-400 text-sm">24h Vol: {data.volume24h}</div>
+      <div className="text-slate-400 text-sm relative z-10">
+        24h Vol: {data.volume24h}
+      </div>
 
       {data.marketCap && (
-        <div className="text-slate-500 text-xs mt-1">
+        <div className="text-slate-500 text-xs mt-1 relative z-10">
           MCap: {data.marketCap}
         </div>
       )}

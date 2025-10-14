@@ -3,6 +3,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --nosana-green: #10e80c;
+  --nosana-black: #000000;
 }
 
 @theme inline {
@@ -10,6 +12,8 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-sora);
   --font-mono: var(--font-jetbrains-mono);
+  --color-nosana-green: #10e80c;
+  --color-nosana-black: #000000;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -27,6 +31,218 @@ body {
     system-ui,
     -apple-system,
     sans-serif;
+}
+
+/* Dot pattern background */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image: radial-gradient(
+    rgba(16, 232, 12, 0.1) 1px,
+    transparent 1px
+  );
+  background-size: 50px 50px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Neon glow utility classes */
+.glow-green {
+  box-shadow:
+    0 0 20px rgba(16, 232, 12, 0.3),
+    0 0 40px rgba(16, 232, 12, 0.1);
+}
+
+.glow-green-text {
+  text-shadow:
+    0 0 10px rgba(16, 232, 12, 0.5),
+    0 0 20px rgba(16, 232, 12, 0.3);
+}
+
+.neon-glow-sm {
+  text-shadow:
+    0 0 10px rgba(16, 232, 12, 0.8),
+    0 0 20px rgba(16, 232, 12, 0.4);
+}
+
+.neon-glow {
+  text-shadow:
+    0 0 10px rgba(16, 232, 12, 0.8),
+    0 0 20px rgba(16, 232, 12, 0.6),
+    0 0 30px rgba(16, 232, 12, 0.4);
+}
+
+.neon-glow-lg {
+  text-shadow:
+    0 0 10px rgba(16, 232, 12, 1),
+    0 0 20px rgba(16, 232, 12, 0.8),
+    0 0 30px rgba(16, 232, 12, 0.6),
+    0 0 40px rgba(16, 232, 12, 0.4);
+}
+
+.neon-border {
+  box-shadow:
+    0 0 10px rgba(16, 232, 12, 0.3),
+    0 0 20px rgba(16, 232, 12, 0.2),
+    inset 0 0 10px rgba(16, 232, 12, 0.1);
+}
+
+/* Glass-morphism effects */
+.glass {
+  background: rgba(16, 232, 12, 0.03);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(16, 232, 12, 0.1);
+}
+
+.glass-dark {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(16, 232, 12, 0.15);
+}
+
+/* Animated gradient border */
+@keyframes borderGlow {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+.animated-border {
+  position: relative;
+  background: linear-gradient(
+    90deg,
+    rgba(16, 232, 12, 0.1),
+    rgba(16, 232, 12, 0.4),
+    rgba(16, 232, 12, 0.1)
+  );
+  background-size: 200% 100%;
+  animation: borderGlow 3s ease infinite;
+  padding: 1px;
+  border-radius: 0.75rem;
+}
+
+.animated-border > * {
+  background: rgba(17, 24, 39, 0.95);
+  border-radius: 0.75rem;
+}
+
+/* Hover lift effect */
+.hover-lift {
+  transition:
+    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px) scale(1.01);
+  box-shadow:
+    0 12px 40px rgba(16, 232, 12, 0.25),
+    0 0 80px rgba(16, 232, 12, 0.1);
+}
+
+/* Shimmer effect */
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+.shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.shimmer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0) 0%,
+    rgba(16, 232, 12, 0.15) 50%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  background-size: 1000px 100%;
+  animation: shimmer 3s infinite;
+  pointer-events: none;
+}
+
+/* Card glow on hover */
+.card-glow {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(16, 232, 12, 0.1);
+}
+
+.card-glow:hover {
+  border-color: rgba(16, 232, 12, 0.5);
+  box-shadow:
+    0 0 20px rgba(16, 232, 12, 0.2),
+    0 0 40px rgba(16, 232, 12, 0.15),
+    inset 0 0 20px rgba(16, 232, 12, 0.05);
+  transform: translateY(-2px);
+}
+
+/* Number counter animation */
+@keyframes countUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.count-up {
+  animation: countUp 0.5s ease-out;
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #10e80c 0%, #0abf08 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Floating animation */
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.float {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Grid overlay */
+.grid-overlay {
+  background-image:
+    linear-gradient(rgba(16, 232, 12, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 232, 12, 0.03) 1px, transparent 1px);
+  background-size: 50px 50px;
 }
 
 body,

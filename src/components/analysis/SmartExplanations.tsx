@@ -60,7 +60,7 @@ export default function SmartExplanations() {
   return (
     <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6 shadow-xl">
       <div className="flex items-center gap-2 mb-6">
-        <Bot className="h-6 w-6 text-cyan-400" />
+        <Bot className="h-6 w-6 text-[#10E80C]" />
         <h3 className="text-xl font-bold text-white">Smart Explanations</h3>
         <HelpCircle className="h-4 w-4 text-slate-400" />
       </div>
@@ -82,12 +82,12 @@ export default function SmartExplanations() {
             }
             className={`p-4 rounded-xl border-2 text-left transition-all hover:scale-105 ${
               selectedConcept === item.concept
-                ? "bg-cyan-900/30 border-cyan-500"
+                ? "bg-[#064D04]/30 border-[#10E80C]"
                 : "bg-slate-700/30 border-slate-600/30 hover:border-slate-500"
             }`}
           >
             <div className="flex items-center gap-2 mb-2">
-              <MessageSquare className="h-5 w-5 text-cyan-400" />
+              <MessageSquare className="h-5 w-5 text-[#10E80C]" />
               <h4 className="font-semibold text-white text-sm">
                 {item.concept}
               </h4>
@@ -99,10 +99,10 @@ export default function SmartExplanations() {
 
       {/* Expanded Explanation */}
       {selectedConcept && (
-        <div className="mt-6 bg-gradient-to-r from-cyan-900/30 to-blue-900/30 border border-cyan-700/30 rounded-xl p-6 animate-fade-in">
+        <div className="mt-6 bg-gradient-to-r from-[#064D04]/30 to-blue-900/30 border border-[#0A8A07]/30 rounded-xl p-6 animate-fade-in">
           <div className="flex items-center gap-2 mb-4">
-            <div className="p-2 bg-cyan-500/20 rounded-lg">
-              <Bot className="h-6 w-6 text-cyan-400" />
+            <div className="p-2 bg-[#10E80C]/20 rounded-lg">
+              <Bot className="h-6 w-6 text-[#10E80C]" />
             </div>
             <h4 className="text-lg font-bold text-white">{selectedConcept}</h4>
           </div>
@@ -112,7 +112,7 @@ export default function SmartExplanations() {
             .map((item, idx) => (
               <div key={idx}>
                 <div className="mb-4">
-                  <div className="text-sm text-cyan-400 font-semibold mb-2">
+                  <div className="text-sm text-[#10E80C] font-semibold mb-2">
                      What it means:
                   </div>
                   <p className="text-slate-200 leading-relaxed">
@@ -121,8 +121,8 @@ export default function SmartExplanations() {
                 </div>
 
                 {item.example && (
-                  <div className="bg-slate-800/50 rounded-lg p-4 border border-cyan-700/20">
-                    <div className="text-sm text-cyan-400 font-semibold mb-2">
+                  <div className="bg-slate-800/50 rounded-lg p-4 border border-[#0A8A07]/20">
+                    <div className="text-sm text-[#10E80C] font-semibold mb-2">
                        Example with NOS:
                     </div>
                     <p className="text-slate-300 text-sm leading-relaxed">

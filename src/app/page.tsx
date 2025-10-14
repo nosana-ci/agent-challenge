@@ -20,6 +20,7 @@ import CorrelationMatrix from "@/components/charts/CorrelationMatrix";
 import ExportReport from "@/components/reports/ExportReport";
 import DeepAnalysisMode from "@/components/analysis/DeepAnalysisMode";
 import SmartExplanations from "@/components/analysis/SmartExplanations";
+import BackgroundEffects from "@/components/ui/BackgroundEffects";
 import type {
   MarketData,
   NetworkStats,
@@ -231,10 +232,11 @@ export default function NosightDashboard() {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+    <div className="min-h-screen bg-black relative">
+      <BackgroundEffects />
       <DashboardHeader userName="Builder" />
 
-      <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
+      <div className="max-w-7xl mx-auto px-4 md:px-6 py-8 relative z-10">
         {/* Query Input Section */}
         <QueryInput onAnalyze={handleAnalyze} isAnalyzing={isAnalyzing} />
 
@@ -304,7 +306,7 @@ export default function NosightDashboard() {
         <div className="text-center text-slate-500 text-sm mt-8 pb-4">
           <p>
             Built for the{" "}
-            <span className="text-teal-400 font-semibold">
+            <span className="text-[[#10E80C]] font-semibold">
               Nosana Builders Challenge
             </span>
           </p>
@@ -340,10 +342,10 @@ export default function NosightDashboard() {
 // }) {
 //   if (status !== "complete") {
 //     return (
-//       <div className="rounded-xl shadow-lg mt-6 mb-4 max-w-md w-full bg-white border border-teal-200">
-//         <div className="bg-gradient-to-r from-teal-50 to-cyan-50 p-6 w-full">
+//       <div className="rounded-xl shadow-lg mt-6 mb-4 max-w-md w-full bg-white border border-[[#10E80C]]200">
+//         <div className="bg-gradient-to-r from-[[#10E80C]]50 to-[[#0CAF09]]50 p-6 w-full">
 //           <div className="flex items-center gap-3">
-//             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-teal-400 to-cyan-600 animate-pulse" />
+//             <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[[#10E80C]]400 to-[[#0CAF09]]600 animate-pulse" />
 //             <div>
 //               <p className="text-gray-700 font-medium">
 //                 Analyzing {symbol || "cryptocurrency"}...
@@ -362,9 +364,9 @@ export default function NosightDashboard() {
 //   const isPositive = priceChange24h > 0;
 
 //   return (
-//     <div className="rounded-xl shadow-xl mt-6 mb-4 max-w-md w-full bg-white border-2 border-teal-200 overflow-hidden">
+//     <div className="rounded-xl shadow-xl mt-6 mb-4 max-w-md w-full bg-white border-2 border-[[#10E80C]]200 overflow-hidden">
 //       {/* Header with gradient */}
-//       <div className="bg-gradient-to-r from-teal-500 to-cyan-600 p-6">
+//       <div className="bg-gradient-to-r from-[[#10E80C]]500 to-[[#0CAF09]]600 p-6">
 //         <div className="flex items-center justify-between">
 //           <div>
 //             <h3 className="text-2xl font-bold text-white uppercase tracking-wide">
@@ -429,7 +431,7 @@ export default function NosightDashboard() {
 
 //         {/* Analysis section */}
 //         {result.analysis_summary && (
-//           <div className="mt-4 p-4 bg-teal-50 rounded-lg border border-teal-200">
+//           <div className="mt-4 p-4 bg-[[#10E80C]]50 rounded-lg border border-[[#10E80C]]200">
 //             <div className="flex items-center gap-2 mb-2">
 //               <span className="text-teal-600 text-lg">🔍</span>
 //               <p className="text-teal-900 text-sm font-semibold">AI Analysis</p>

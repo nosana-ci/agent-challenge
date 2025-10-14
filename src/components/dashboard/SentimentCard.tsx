@@ -30,16 +30,19 @@ export default function SentimentCard({ sentiment }: SentimentCardProps) {
   };
 
   return (
-    <div
-      className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-xl p-6
-                  hover:border-purple-500/30 transition-all hover:shadow-xl hover:shadow-purple-500/10"
-    >
-      <h3 className="text-slate-400 text-sm mb-4 font-medium">Sentiment</h3>
+    <div className="glass-dark card-glow hover-lift rounded-xl p-6 relative overflow-hidden">
+      <div className="shimmer absolute inset-0" />
 
-      <div className="flex items-center gap-3 mb-3">
-        <span className="text-4xl">{sentiment.icon}</span>
+      <h3 className="text-slate-400 text-sm mb-4 font-medium relative z-10">
+        Sentiment
+      </h3>
+
+      <div className="flex items-center gap-3 mb-3 relative z-10">
+        <span className="text-4xl float">{sentiment.icon}</span>
         <div>
-          <div className="text-white font-bold text-xl">{sentiment.label}</div>
+          <div className="text-white font-bold text-xl count-up">
+            {sentiment.label}
+          </div>
           <div className="text-slate-400 text-sm">
             Score: {sentiment.score.toFixed(2)}
           </div>
@@ -47,16 +50,16 @@ export default function SentimentCard({ sentiment }: SentimentCardProps) {
       </div>
 
       <div
-        className={`flex items-center gap-2 ${getTrendColor()} font-semibold`}
+        className={`flex items-center gap-2 ${getTrendColor()} font-semibold relative z-10`}
       >
         <span>Trend:</span>
         <span className="text-lg">{getTrendIcon()}</span>
       </div>
 
       {/* Sentiment Bar */}
-      <div className="mt-4 bg-slate-700/50 rounded-full h-2 overflow-hidden">
+      <div className="mt-4 glass rounded-full h-3 overflow-hidden relative z-10">
         <div
-          className="bg-gradient-to-r from-teal-500 to-cyan-500 h-full transition-all duration-500"
+          className="bg-gradient-to-r from-[#10E80C] to-[#0abf08] h-full transition-all duration-500 neon-border"
           style={{ width: `${sentiment.score * 100}%` }}
         />
       </div>

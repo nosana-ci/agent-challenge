@@ -124,7 +124,7 @@ export default function DeepAnalysisMode({ asset }: DeepAnalysisProps) {
           ))}
 
           {/* Action Recommendation */}
-          <div className="bg-gradient-to-r from-teal-900/30 to-cyan-900/30 border border-teal-700/30 rounded-xl p-5 mt-6">
+          <div className="bg-gradient-to-r from-[#064D04]/30 to-[#064D04]/30 border border-[#0A8A07]/30 rounded-xl p-5 mt-6">
             <div className="flex items-center gap-2 mb-3">
               <Zap className="h-5 w-5 text-yellow-400" />
               <h4 className="font-semibold text-white">AI Recommendation</h4>

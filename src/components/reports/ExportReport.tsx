@@ -171,7 +171,7 @@ export default function ExportReport({ analysis }: ExportReportProps) {
   return (
     <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6 shadow-xl">
       <div className="flex items-center gap-2 mb-4">
-        <FileText className="h-5 w-5 text-cyan-400" />
+        <FileText className="h-5 w-5 text-[#10E80C]" />
         <h3 className="text-xl font-bold text-white">Export Report</h3>
       </div>
 
