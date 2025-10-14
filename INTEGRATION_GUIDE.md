@@ -24,6 +24,16 @@ This document outlines all the integrations needed to make the Nosight dashboard
 
 ---
 
+## 🏗️ System Architecture
+
+```
+USER → Frontend (React) → API Routes → Mastra Agent → External APIs
+                                    ↓
+                              Storage Layer
+                            (PostgreSQL + Redis)
+```
+
+
 ## 1️⃣ Mastra AI Agent Integration
 
 ### Current State
