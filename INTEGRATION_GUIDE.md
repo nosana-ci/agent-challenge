@@ -56,52 +56,73 @@ USER → Frontend (React) → API Routes → Mastra Agent → External APIs
 
 USER QUERY → Mastra Agent → Mastra Tools → External APIs → Response
 
-
 ┌─────────────────────────────────────────────────────┐
-│           USER INTERFACE (React Components)          │
-│  • QueryInput                                        │
-│  • LiveAnalysisPanel                                 │
-│  • MarketStatsCard                                   │
+│ USER INTERFACE (React Components) │
+│ • QueryInput │
+│ • LiveAnalysisPanel │
+│ • MarketStatsCard │
 └──────────────────┬───────────────────────────────────┘
-                   │
-                   │ User asks: "Analyze Bitcoin"
-                   ▼
+│
+│ User asks: "Analyze Bitcoin"
+▼
 ┌─────────────────────────────────────────────────────┐
-│          COPILOTKIT (Streaming Layer)                │
-│  • Receives user query                               │
-│  • Routes to Mastra agent                            │
-│  • Streams response back to UI                       │
+│ COPILOTKIT (Streaming Layer) │
+│ • Receives user query │
+│ • Routes to Mastra agent │
+│ • Streams response back to UI │
 └──────────────────┬───────────────────────────────────┘
-                   │
-                   ▼
+│
+▼
 ┌─────────────────────────────────────────────────────┐
-│         MASTRA AGENT (AI Orchestration)              │
-│  • Understands user intent                           │
-│  • Decides which tools to use                        │
-│  • Calls tools in sequence                           │
-│  • Synthesizes results with LLM                      │
+│ MASTRA AGENT (AI Orchestration) │
+│ • Understands user intent │
+│ • Decides which tools to use │
+│ • Calls tools in sequence │
+│ • Synthesizes results with LLM │
 └──────────────────┬───────────────────────────────────┘
-                   │
-                   ├─► Tool: get-crypto-price
-                   │   └─► Fetches from CoinGecko
-                   │
-                   ├─► Tool: get-solana-network-stats
-                   │   └─► Fetches from Solana RPC
-                   │
-                   ├─► Tool: get-market-sentiment
-                   │   └─► Fetches from LunarCrush
-                   │
-                   └─► Tool: get-price-history
-                       └─► Fetches from CoinGecko
-                   │
-                   ▼
+│
+├─► Tool: get-crypto-price
+│ └─► Fetches from CoinGecko
+│
+├─► Tool: get-solana-network-stats
+│ └─► Fetches from Solana RPC
+│
+├─► Tool: get-market-sentiment
+│ └─► Fetches from LunarCrush
+│
+└─► Tool: get-price-history
+└─► Fetches from CoinGecko
+│
+▼
 ┌─────────────────────────────────────────────────────┐
-│          EXTERNAL APIs (Data Sources)                │
-│  • CoinGecko API (crypto prices)                     │
-│  • Solana RPC (blockchain data)                      │
-│  • LunarCrush (sentiment)                            │
-│  • Twitter API (optional)                            │
+│ EXTERNAL APIs (Data Sources) │
+│ • CoinGecko API (crypto prices) │
+│ • Solana RPC (blockchain data) │
+│ • LunarCrush (sentiment) │
+│ • Twitter API (optional) │
 └─────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────┐
+│ Frontend (Next.js Dashboard) │
+│ - Your beautiful UI │
+│ - Connects to Mastra agent │
+└──────────────┬──────────────────────────────┘
+│
+▼
+┌─────────────────────────────────────────────┐
+│ Mastra Agent Server │
+│ - Runs on port 4111 │
+│ - Tool calling with real APIs │
+│ - LLM processing (GPT-4) │
+└──────────────┬──────────────────────────────┘
+│
+▼
+┌─────────────────────────────────────────────┐
+│ DEPLOYED TO NOSANA NETWORK │
+│ - Runs in Docker container │
+│ - Uses Nosana's decentralized GPU/CPU │
+│ - Public URL for judges to access │
+└─────────────────────────────────────────────┘
 
 ## 1️⃣ Mastra AI Agent Integration
 
@@ -204,4 +225,3 @@ utilizationRate?: number; // 67
 - **CoinGecko**: Crypto data → https://www.coingecko.com/en/api
 - **Privy**: Wallet auth → https://dashboard.privy.io
 - **OpenAI**: AI agent → https://platform.openai.com
-
