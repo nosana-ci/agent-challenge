@@ -113,7 +113,7 @@ export default function SmartExplanations() {
               <div key={idx}>
                 <div className="mb-4">
                   <div className="text-sm text-cyan-400 font-semibold mb-2">
-                    📖 What it means:
+                     What it means:
                   </div>
                   <p className="text-slate-200 leading-relaxed">
                     {item.explanation}
@@ -123,7 +123,7 @@ export default function SmartExplanations() {
                 {item.example && (
                   <div className="bg-slate-800/50 rounded-lg p-4 border border-cyan-700/20">
                     <div className="text-sm text-cyan-400 font-semibold mb-2">
-                      💡 Example with NOS:
+                       Example with NOS:
                     </div>
                     <p className="text-slate-300 text-sm leading-relaxed">
                       {item.example}

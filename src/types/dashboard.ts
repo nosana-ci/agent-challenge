@@ -17,7 +17,7 @@ export interface SentimentData {
   score: number;
   label: string;
   trend: "up" | "down" | "neutral";
-  emoji: string;
+  icon: React.ReactNode;
 }
 
 export interface AnalysisResult {

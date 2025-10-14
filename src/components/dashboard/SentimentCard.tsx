@@ -37,7 +37,7 @@ export default function SentimentCard({ sentiment }: SentimentCardProps) {
       <h3 className="text-slate-400 text-sm mb-4 font-medium">Sentiment</h3>
 
       <div className="flex items-center gap-3 mb-3">
-        <span className="text-4xl">{sentiment.emoji}</span>
+        <span className="text-4xl">{sentiment.icon}</span>
         <div>
           <div className="text-white font-bold text-xl">{sentiment.label}</div>
           <div className="text-slate-400 text-sm">

@@ -4,6 +4,7 @@ import { useCoAgent, useCopilotAction } from "@copilotkit/react-core";
 import { useState } from "react";
 import { AgentState as AgentStateSchema } from "@/mastra/agents";
 import { z } from "zod";
+import { FaCirclePlus } from "react-icons/fa6";
 import DashboardHeader from "@/components/dashboard/DashboardHeader";
 import QueryInput from "@/components/dashboard/QueryInput";
 import MarketStatsCard from "@/components/dashboard/MarketStatsCard";
@@ -34,6 +35,7 @@ export default function NosightDashboard() {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [timeframe, setTimeframe] = useState<"1D" | "7D" | "30D">("7D");
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { state } = useCoAgent<AgentState>({
     name: "nosightAgent",
     initialState: {
@@ -61,7 +63,7 @@ export default function NosightDashboard() {
     score: 0.78,
     label: "Positive",
     trend: "up",
-    emoji: "😊",
+    icon: <FaCirclePlus className="text-green-400" />,
   };
 
   const chartData: ChartDataPoint[] = [
@@ -103,8 +105,6 @@ export default function NosightDashboard() {
     [0.72, 0.89, 1.0, 0.81],
     [0.58, 0.74, 0.81, 1.0],
   ];
-
-
 
   // Enhanced analysis mock data
   const enhancedAnalysis: EnhancedAnalysisResult = {
@@ -199,15 +199,23 @@ export default function NosightDashboard() {
     status: "complete",
   };
 
-  const analyses: AnalysisResult[] =
-    state.crypto_analyses?.map((analysis: string, index: number) => ({
-      id: `analysis-${index}`,
+  const analyses: AnalysisResult[] = [
+    {
+      id: "analysis-1",
       timestamp: Date.now(),
-      query: "Market Analysis",
-      findings: [analysis],
-      insight: "Strong fundamentals with increasing network adoption.",
+      query: "Analyze NOS token performance and market trends",
+      findings: [
+        "NOS price increased 12.5% in the last 24 hours, outperforming most altcoins",
+        "Network utilization rate is at a healthy 67% with 342 active nodes",
+        "Trading volume surged 340% compared to the 7-day average",
+        "Strong buying pressure detected with RSI at 68.5 (approaching overbought)",
+        "Recent protocol upgrade enabling new GPU job types is driving adoption",
+      ],
+      insight:
+        "Strong fundamentals with increasing network adoption. The combination of technical momentum, growing network activity, and recent infrastructure improvements suggests continued bullish sentiment. However, monitor RSI levels as we approach overbought territory.",
       status: "complete" as const,
-    })) || [];
+    },
+  ];
 
   const handleAnalyze = (query: string) => {
     setIsAnalyzing(true);
@@ -276,8 +284,6 @@ export default function NosightDashboard() {
             matrix={correlationMatrix}
           />
         </div>
-
-    
 
         {/* Deep Analysis Mode */}
         <div className="mt-8">

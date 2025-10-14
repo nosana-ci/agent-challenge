@@ -2,7 +2,23 @@
 
 import { AnalysisResult } from "@/types/dashboard";
 import { EnhancedAnalysisResult } from "@/types/enhanced-analysis";
-import { AlertTriangle, Activity, Zap, CheckCircle2 } from "lucide-react";
+import {
+  AlertTriangle,
+  Activity,
+  Zap,
+  CheckCircle2,
+  TrendingUp,
+  TrendingDown,
+  Info,
+  Rocket,
+  BarChart3,
+  Bot,
+  Download,
+  Bell,
+  RefreshCw,
+  Lightbulb,
+  Clock,
+} from "lucide-react";
 
 interface LiveAnalysisPanelProps {
   analyses: AnalysisResult[];
@@ -16,6 +32,34 @@ export default function LiveAnalysisPanel({
   enhancedAnalysis,
 }: LiveAnalysisPanelProps) {
   const latestAnalysis = currentAnalysis || analyses[analyses.length - 1];
+
+  const exportAnalysisToCSV = () => {
+    if (!latestAnalysis) return;
+
+    const csvContent = [
+      ["Nosight Live Analysis Report"],
+      ["Generated:", new Date(latestAnalysis.timestamp).toLocaleString()],
+      ["Query:", latestAnalysis.query],
+      [""],
+      ["Key Findings:"],
+      ...latestAnalysis.findings.map((finding) => [finding]),
+      [""],
+      ["Insight:"],
+      [latestAnalysis.insight],
+      [""],
+      ["Status:", latestAnalysis.status],
+    ]
+      .map((row) => row.join(","))
+      .join("\n");
+
+    const blob = new Blob([csvContent], { type: "text/csv" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `nosight-analysis-${Date.now()}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  };
 
   //   if (!latestAnalysis && analyses.length === 0) {
   //     return (
@@ -75,11 +119,19 @@ export default function LiveAnalysisPanel({
                         : "bg-slate-600/30 text-slate-300"
                   }`}
                 >
-                  {enhancedAnalysis.technicalIndicators.rsi > 70
-                    ? "🔥 Overbought"
-                    : enhancedAnalysis.technicalIndicators.rsi < 30
-                      ? "❄️ Oversold"
-                      : "⚖️ Neutral"}
+                  {enhancedAnalysis.technicalIndicators.rsi > 70 ? (
+                    <>
+                      <TrendingUp className="h-3 w-3" /> Overbought
+                    </>
+                  ) : enhancedAnalysis.technicalIndicators.rsi < 30 ? (
+                    <>
+                      <TrendingDown className="h-3 w-3" /> Oversold
+                    </>
+                  ) : (
+                    <>
+                      <Activity className="h-3 w-3" /> Neutral
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -167,24 +219,16 @@ export default function LiveAnalysisPanel({
                     }`}
                   >
                     <div className="flex items-start gap-3">
-                      <div
-                        className={`text-2xl ${
-                          signal.type === "bullish"
-                            ? "🚀"
-                            : signal.type === "bearish"
-                              ? "📉"
-                              : signal.type === "alert"
-                                ? "⚠️"
-                                : "ℹ️"
-                        }`}
-                      >
-                        {signal.type === "bullish"
-                          ? "🚀"
-                          : signal.type === "bearish"
-                            ? "📉"
-                            : signal.type === "alert"
-                              ? "⚠️"
-                              : "ℹ️"}
+                      <div className="p-2 rounded-lg bg-slate-800/50">
+                        {signal.type === "bullish" ? (
+                          <TrendingUp className="h-6 w-6" />
+                        ) : signal.type === "bearish" ? (
+                          <TrendingDown className="h-6 w-6 text-red-400" />
+                        ) : signal.type === "alert" ? (
+                          <AlertTriangle className="h-6 w-6 text-yellow-400" />
+                        ) : (
+                          <Info className="h-6 w-6 text-blue-400" />
+                        )}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center justify-between mb-2">
@@ -207,7 +251,7 @@ export default function LiveAnalysisPanel({
                           {signal.description}
                         </p>
                         <div className="flex items-center gap-2 text-sm font-medium text-cyan-400">
-                          <span>💡</span>
+                          <Lightbulb className="h-4 w-4" />
                           <span>{signal.action}</span>
                         </div>
                       </div>
@@ -240,16 +284,18 @@ export default function LiveAnalysisPanel({
                           : "bg-slate-700/30 border-slate-600/20"
                     }`}
                   >
-                    <div className="text-3xl">
-                      {anomaly.type === "volume_spike"
-                        ? "📊"
-                        : anomaly.type === "price_surge"
-                          ? "🚀"
-                          : anomaly.type === "price_crash"
-                            ? "📉"
-                            : anomaly.type === "dev_activity"
-                              ? "⚡"
-                              : "🐋"}
+                    <div className="p-2 rounded-lg bg-slate-800/50">
+                      {anomaly.type === "volume_spike" ? (
+                        <BarChart3 className="h-6 w-6 text-cyan-400" />
+                      ) : anomaly.type === "price_surge" ? (
+                        <Rocket className="h-6 w-6 text-green-400" />
+                      ) : anomaly.type === "price_crash" ? (
+                        <TrendingDown className="h-6 w-6 text-red-400" />
+                      ) : anomaly.type === "dev_activity" ? (
+                        <Zap className="h-6 w-6 text-yellow-400" />
+                      ) : (
+                        <Activity className="h-6 w-6 text-purple-400" />
+                      )}
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center justify-between mb-2">
@@ -284,7 +330,7 @@ export default function LiveAnalysisPanel({
       <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6 shadow-xl">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
-            <span className="text-xl">📈</span>
+            <TrendingUp className="h-6 w-6 text-cyan-400" />
             <h2 className="text-xl font-bold text-white">Live Analysis</h2>
           </div>
           {latestAnalysis?.status === "analyzing" && (
@@ -297,14 +343,6 @@ export default function LiveAnalysisPanel({
 
         {latestAnalysis && (
           <div className="space-y-4">
-            {/* Agent Header */}
-            <div className="flex items-center gap-2 text-slate-300">
-              <div className="w-8 h-8 bg-gradient-to-br from-teal-400 to-cyan-600 rounded-full flex items-center justify-center">
-                <span className="text-white text-sm">🤖</span>
-              </div>
-              <span className="font-semibold">Nosight:</span>
-            </div>
-
             <div className="text-slate-300 mb-4">{latestAnalysis.query}</div>
 
             {/* Progress Steps */}
@@ -319,7 +357,7 @@ export default function LiveAnalysisPanel({
                   <span>Retrieved on-chain metrics</span>
                 </div>
                 <div className="flex items-center gap-2 text-yellow-400 animate-pulse">
-                  <span>⏳</span>
+                  <Clock className="h-4 w-4" />
                   <span>Analyzing sentiment...</span>
                 </div>
               </div>
@@ -329,7 +367,7 @@ export default function LiveAnalysisPanel({
             {latestAnalysis.findings && latestAnalysis.findings.length > 0 && (
               <div className="bg-slate-700/30 rounded-xl p-4 mb-4 border border-slate-600/30">
                 <div className="text-teal-400 font-semibold mb-3 flex items-center gap-2">
-                  <span>📊</span>
+                  <BarChart3 className="h-5 w-5" />
                   <span>Key Findings:</span>
                 </div>
                 <ul className="space-y-2">
@@ -350,7 +388,7 @@ export default function LiveAnalysisPanel({
             {latestAnalysis.insight && latestAnalysis.status === "complete" && (
               <div className="bg-gradient-to-r from-teal-900/30 to-cyan-900/30 border border-teal-700/30 rounded-xl p-4 mb-4">
                 <div className="text-teal-300 font-semibold mb-2 flex items-center gap-2">
-                  <span>💡</span>
+                  <Lightbulb className="h-5 w-5" />
                   <span>Insight:</span>
                 </div>
                 <div className="text-slate-300 leading-relaxed">
@@ -362,16 +400,16 @@ export default function LiveAnalysisPanel({
             {/* Action Buttons */}
             {latestAnalysis.status === "complete" && (
               <div className="flex flex-wrap gap-3 pt-2">
-                <button className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm transition-all flex items-center gap-2">
-                  <span>📥</span>
+                <button
+                  onClick={exportAnalysisToCSV}
+                  className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm transition-all flex items-center gap-2"
+                >
+                  <Download className="h-4 w-4" />
                   <span>Export Report</span>
                 </button>
+
                 <button className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm transition-all flex items-center gap-2">
-                  <span>🔔</span>
-                  <span>Set Alert</span>
-                </button>
-                <button className="bg-slate-700 hover:bg-slate-600 text-white px-4 py-2 rounded-lg text-sm transition-all flex items-center gap-2">
-                  <span>🔄</span>
+                  <RefreshCw className="h-4 w-4" />
                   <span>Refresh</span>
                 </button>
               </div>

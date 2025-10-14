@@ -1,6 +1,7 @@
 "use client";
 
 import { EnhancedAnalysisResult } from "@/types/enhanced-analysis";
+import { TrendingUp, TrendingDown, Pause } from "lucide-react";
 
 interface RiskScoreCardProps {
   riskScore: EnhancedAnalysisResult["riskScore"];
@@ -21,20 +22,17 @@ export default function RiskScoreCard({ riskScore }: RiskScoreCardProps) {
   const getRecommendationIcon = () => {
     switch (riskScore.recommendation) {
       case "buy":
-        return "🟢";
+        return <TrendingUp className="h-8 w-8" />;
       case "sell":
-        return "🔴";
+        return <TrendingDown className="h-8 w-8" />;
       default:
-        return "🟡";
+        return <Pause className="h-8 w-8" />;
     }
   };
 
   return (
     <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6 shadow-xl">
-      <div className="flex items-center gap-2 mb-6">
-        <span className="text-2xl">🎯</span>
-        <h3 className="text-xl font-bold text-white">Risk Assessment</h3>
-      </div>
+      <h3 className="text-xl font-bold text-white my-3">Risk Assessment</h3>
 
       {/* Recommendation Badge */}
       <div

@@ -1,6 +1,7 @@
 "use client";
 
 import { EnhancedAnalysisResult } from "@/types/enhanced-analysis";
+import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 
 interface ExecutiveSummaryProps {
   analysis: EnhancedAnalysisResult;
@@ -21,21 +22,18 @@ export default function ExecutiveSummary({ analysis }: ExecutiveSummaryProps) {
   const getSentimentIcon = () => {
     switch (analysis.executiveSummary.overallSentiment) {
       case "bullish":
-        return "📈";
+        return <TrendingUp className="h-5 w-5" />;
       case "bearish":
-        return "📉";
+        return <TrendingDown className="h-5 w-5" />;
       default:
-        return "➡️";
+        return <Minus className="h-5 w-5" />;
     }
   };
 
   return (
     <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6 shadow-xl">
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-2">
-          <span className="text-2xl">📋</span>
-          <h3 className="text-xl font-bold text-white">Executive Summary</h3>
-        </div>
+        <h3 className="text-xl font-bold text-white">Executive Summary</h3>
 
         {/* Sentiment Badge */}
         <div
