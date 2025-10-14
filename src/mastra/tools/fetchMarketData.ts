@@ -57,6 +57,25 @@ export const fetchMarketData = createTool({
     console.log("🔍 Fetching market data for:", { symbol, days, interval });
 
     try {
+      // Add timeout for API calls
+      const FETCH_TIMEOUT = 10000; // 10 seconds
+      const fetchWithTimeout = async (url: string, options: RequestInit) => {
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), FETCH_TIMEOUT);
+
+        try {
+          const response = await fetch(url, {
+            ...options,
+            signal: controller.signal,
+          });
+          clearTimeout(timeoutId);
+          return response;
+        } catch (error) {
+          clearTimeout(timeoutId);
+          throw error;
+        }
+      };
+
       // Get API key from environment (optional for free tier)
       const apiKey = process.env.COINCAP_API_KEY;
       console.log("🔑 API Key available:", !!apiKey);
@@ -77,7 +96,7 @@ export const fetchMarketData = createTool({
       try {
         const assetUrl = `https://api.coincap.io/v2/assets/${symbolSlug}`;
         console.log("📡 Fetching asset data from:", assetUrl);
-        const assetResponse = await fetch(assetUrl, { headers });
+        const assetResponse = await fetchWithTimeout(assetUrl, { headers });
         console.log("📊 Asset response status:", assetResponse.status);
 
         if (assetResponse.ok) {
@@ -92,7 +111,7 @@ export const fetchMarketData = createTool({
           // If slug doesn't work, search by symbol
           const searchUrl = `https://api.coincap.io/v2/assets?search=${symbol}&limit=1`;
           console.log("🔍 Searching with URL:", searchUrl);
-          const searchResponse = await fetch(searchUrl, { headers });
+          const searchResponse = await fetchWithTimeout(searchUrl, { headers });
           console.log("🔍 Search response status:", searchResponse.status);
 
           if (searchResponse.ok) {
@@ -126,7 +145,7 @@ export const fetchMarketData = createTool({
 
       // Get historical data
       const historyUrl = `https://rest.coincap.io/v3/assets/${assetData.id}/history?interval=${interval === "hourly" ? "h1" : "d1"}&start=${Date.now() - days * 24 * 60 * 60 * 1000}&end=${Date.now()}`;
-      const historyResponse = await fetch(historyUrl, { headers });
+      const historyResponse = await fetchWithTimeout(historyUrl, { headers });
 
       let historical_data: Array<{ timestamp: number; price: number }> = [];
       if (historyResponse.ok) {
@@ -151,7 +170,7 @@ export const fetchMarketData = createTool({
         try {
           // Try to get RSI
           const rsiUrl = `https://rest.coincap.io/v3/ta/${assetData.id}/rsi/latest`;
-          const rsiResponse = await fetch(rsiUrl, { headers });
+          const rsiResponse = await fetchWithTimeout(rsiUrl, { headers });
           if (rsiResponse.ok) {
             const rsiResult = await rsiResponse.json();
             technical_indicators.rsi = rsiResult.data?.rsi || null;
@@ -159,7 +178,7 @@ export const fetchMarketData = createTool({
 
           // Try to get SMA
           const smaUrl = `https://rest.coincap.io/v3/ta/${assetData.id}/sma/latest?period=20`;
-          const smaResponse = await fetch(smaUrl, { headers });
+          const smaResponse = await fetchWithTimeout(smaUrl, { headers });
           if (smaResponse.ok) {
             const smaResult = await smaResponse.json();
             technical_indicators.sma_20 = smaResult.data?.sma || null;
@@ -167,7 +186,7 @@ export const fetchMarketData = createTool({
 
           // Try to get EMA
           const emaUrl = `https://rest.coincap.io/v3/ta/${assetData.id}/ema/latest?period=20`;
-          const emaResponse = await fetch(emaUrl, { headers });
+          const emaResponse = await fetchWithTimeout(emaUrl, { headers });
           if (emaResponse.ok) {
             const emaResult = await emaResponse.json();
             technical_indicators.ema_20 = emaResult.data?.ema || null;
@@ -239,8 +258,13 @@ export const fetchMarketData = createTool({
 
       return result;
     } catch (error) {
+      console.error("❌ Error fetching market data:", error);
+
+      // Return a fallback error response instead of throwing
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
       throw new Error(
-        `Failed to fetch market data: ${error instanceof Error ? error.message : "Unknown error"}`
+        `Failed to fetch market data for ${context.symbol}: ${errorMessage}. Please try again or use a different cryptocurrency symbol like 'bitcoin', 'ethereum', or 'solana'.`
       );
     }
   },

@@ -11,7 +11,7 @@ export const AgentState = z.object({
 });
 
 export const nosightAgent = new Agent({
-  name: "nosight",
+  name: "nosightAgent", // Changed from "nosight" to match frontend references
   description:
     "Fetches crypto and on-chain data, performs analytics, and summarizes insights.",
   model: openaiModel,
