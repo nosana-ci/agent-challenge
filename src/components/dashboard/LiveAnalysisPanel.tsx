@@ -199,7 +199,7 @@ export default function LiveAnalysisPanel({
 
           {/* Trading Signals */}
           {enhancedAnalysis.signals.length > 0 && (
-            <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6 shadow-xl">
+            <div className="bg-slate-800/50 backdrop-blur-md glass-dark card-glow hover-lift rounded-2xl p-6 shadow-xl">
               <div className="flex items-center gap-2 mb-4">
                 <Zap className="h-5 w-5 text-yellow-400" />
                 <h3 className="text-lg font-semibold text-white">
@@ -265,7 +265,7 @@ export default function LiveAnalysisPanel({
 
           {/* Market Anomalies */}
           {enhancedAnalysis.anomalies.length > 0 && (
-            <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6 shadow-xl">
+            <div className="bg-slate-800/50 backdrop-blur-md glass-dark card-glow hover-lift rounded-2xl p-6 shadow-xl">
               <div className="flex items-center gap-2 mb-4">
                 <AlertTriangle className="h-5 w-5 text-orange-400" />
                 <h3 className="text-lg font-semibold text-white">
@@ -328,7 +328,7 @@ export default function LiveAnalysisPanel({
       )}
 
       {/* Standard Live Analysis */}
-      <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6 shadow-xl">
+      <div className="bg-slate-800/50 backdrop-blur-md glass-dark card-glow hover-lift rounded-2xl p-6 shadow-xl">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
             <TrendingUp className="h-6 w-6 text-[#10E80C]" />

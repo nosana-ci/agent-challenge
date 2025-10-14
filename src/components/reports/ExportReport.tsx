@@ -169,7 +169,7 @@ export default function ExportReport({ analysis }: ExportReportProps) {
   };
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6 shadow-xl">
+    <div className="bg-slate-800/50 backdrop-blur-md glass-dark card-glow hover-lift rounded-2xl p-6 shadow-xl">
       <div className="flex items-center gap-2 mb-4">
         <FileText className="h-5 w-5 text-[#10E80C]" />
         <h3 className="text-xl font-bold text-white">Export Report</h3>
@@ -183,18 +183,23 @@ export default function ExportReport({ analysis }: ExportReportProps) {
       <div className="flex flex-col sm:flex-row gap-4">
         <button
           onClick={exportToCSV}
-          className="flex-1  text-white font-semibold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+          aria-label={`Export ${analysis.asset} report as CSV`}
+          className="group flex-1 bg-[rgba(16,232,12,0.5)] text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300 ease-out transform-gpu hover:scale-105 hover:-translate-y-1 active:scale-95 shadow-lg hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-400 flex items-center justify-center gap-2"
         >
-          <Download className="h-5 w-5" />
-          <span>Export as CSV</span>
+          <Download className="h-5 w-5 transform transition-transform duration-300 group-hover:rotate-12" />
+          <span className="transition-colors duration-200 group-hover:text-white/90 group-hover:underline">
+            Export as CSV
+          </span>
         </button>
 
         <button
           onClick={exportToPDF}
-          className="flex-1  text-white font-semibold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2 shadow-lg hover:shadow-xl"
+          className="group flex-1 bg-[rgba(16,232,12,0.5)] text-white font-semibold px-6 py-3 rounded-xl transition-all duration-300 ease-out transform-gpu hover:scale-105 hover:-translate-y-1 active:scale-95 shadow-lg hover:shadow-2xl focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-400 flex items-center justify-center gap-2"
         >
-          <FileText className="h-5 w-5" />
-          <span>Export as PDF</span>
+          <FileText className="h-5 w-5 transform transition-transform duration-300 group-hover:rotate-12" />
+          <span className="transition-colors duration-200 group-hover:text-white/90 group-hover:underline">
+            Export as PDF
+          </span>
         </button>
       </div>
 

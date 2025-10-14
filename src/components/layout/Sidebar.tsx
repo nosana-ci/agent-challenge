@@ -52,9 +52,9 @@ export default function Sidebar({ userName = "Builder" }: SidebarProps) {
       badge: null,
     },
     {
-      name: "Alerts",
+      name: "Questions",
       icon: Bell,
-      href: "#alerts",
+      href: "#questions",
       badge: "3",
     },
     {

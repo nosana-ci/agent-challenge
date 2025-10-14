@@ -340,11 +340,11 @@ export default function NosightDashboard() {
             <DeepAnalysisMode asset={marketData.symbol} />
           </div>
 
-          {/* Alerts Section (Placeholder) */}
-          <div id="alerts" className="scroll-mt-8">
+          {/* Questions Section (Placeholder) */}
+          <div id="questions" className="scroll-mt-8">
             <div className="mb-8 mt-12">
               <h2 className="text-3xl font-bold gradient-text neon-glow-sm mb-2">
-                Alerts
+               Questions
               </h2>
               <p className="text-slate-400">
                 Set up custom price alerts and notifications

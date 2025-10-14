@@ -112,14 +112,14 @@ body::after {
   background: rgba(16, 232, 12, 0.03);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border: 1px solid rgba(16, 232, 12, 0.1);
+  border: 1px solid rgba(16, 232, 12, 0.5);
 }
 
 .glass-dark {
   background: rgba(0, 0, 0, 0.6);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(16, 232, 12, 0.15);
+  border: 1px solid rgba(16, 232, 12, 0.5);
 }
 
 /* Animated gradient border */
@@ -202,7 +202,7 @@ body::after {
 /* Card glow on hover */
 .card-glow {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 1px solid rgba(16, 232, 12, 0.1);
+  border: 1px solid rgba(16, 232, 12, 0.5);
 }
 
 .card-glow:hover {

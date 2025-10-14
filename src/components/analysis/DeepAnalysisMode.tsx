@@ -42,7 +42,7 @@ export default function DeepAnalysisMode({ asset }: DeepAnalysisProps) {
   ];
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6 shadow-xl">
+    <div className="bg-slate-800/50 backdrop-blur-md glass-dark card-glow hover-lift rounded-2xl p-6 shadow-xl">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
           <Sparkles className="h-6 w-6 text-purple-400" />

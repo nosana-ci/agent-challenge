@@ -25,7 +25,7 @@ export default function MarketHeatmap({ data }: MarketHeatmapProps) {
   };
 
   return (
-    <div className="bg-slate-800/50 backdrop-blur-md border border-slate-700/50 rounded-2xl p-6 shadow-xl">
+    <div className="bg-slate-800/50 backdrop-blur-md glass-dark card-glow hover-lift rounded-2xl p-6 shadow-xl">
       <div className="flex items-center gap-2 mb-4">
         <span className="text-2xl">🔥</span>
         <h3 className="text-xl font-bold text-white">Market Heatmap</h3>
