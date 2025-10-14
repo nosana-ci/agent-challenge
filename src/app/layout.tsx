@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Sora, JetBrains_Mono } from "next/font/google";
 import { CopilotKit } from "@copilotkit/react-core";
+import PrivyProviderWrapper from "@/components/providers/PrivyProviderWrapper";
 import "./globals.css";
 import "@copilotkit/react-ui/styles.css";
 
@@ -33,13 +34,15 @@ export default function RootLayout({
       <body
         className={`${sora.variable} ${jetbrainsMono.variable} antialiased`}
       >
-        <CopilotKit
-          publicApiKey="ck_pub_aaf36e66c73bb2a04f2e0300e8c89a49"
-          runtimeUrl="/api/copilotkit"
-          agent="nosightAgent"
-        >
-          {children}
-        </CopilotKit>
+        <PrivyProviderWrapper>
+          <CopilotKit
+            publicApiKey="ck_pub_aaf36e66c73bb2a04f2e0300e8c89a49"
+            runtimeUrl="/api/copilotkit"
+            agent="nosightAgent"
+          >
+            {children}
+          </CopilotKit>
+        </PrivyProviderWrapper>
       </body>
     </html>
   );
