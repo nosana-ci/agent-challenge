@@ -3,8 +3,6 @@
 import { ChartDataPoint } from "@/types/dashboard";
 import { FaChartLine } from "react-icons/fa6";
 import {
-  LineChart,
-  Line,
   AreaChart,
   Area,
   XAxis,
@@ -37,7 +35,7 @@ export default function PriceChart({
   const timeframes: Array<"1D" | "7D" | "30D"> = ["1D", "7D", "30D"];
 
   // Custom tooltip
-  const CustomTooltip = ({ active, payload }: any) => {
+  const CustomTooltip = ({ active, payload }: unknown) => {
     if (active && payload && payload.length) {
       return (
         <div className="bg-slate-900 border border-[#10E80C]/50 rounded-lg p-3 shadow-xl">
