@@ -15,7 +15,12 @@ export default function PrivyProviderWrapper({
         appearance: {
           theme: "dark",
           accentColor: "#10E80C",
+          logo: "https://raw.githubusercontent.com/nosana-ci/brand/main/logo/nosana-logo-white.svg",
           showWalletLoginFirst: true,
+          walletList: ["phantom", "solflare", "backpack"],
+          landingHeader: "Welcome to Nosight",
+          loginMessage:
+            "Connect your Solana wallet to access AI-powered crypto analytics",
         },
         embeddedWallets: {
           solana: {
@@ -28,4 +33,3 @@ export default function PrivyProviderWrapper({
     </PrivyProvider>
   );
 }
-    
