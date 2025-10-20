@@ -82,7 +82,8 @@ We provide a free LLM endpoint hosted on Nosana for development. Edit your `.env
 
 ```env
 # Qwen3:8b - Nosana Endpoint
-OLLAMA_API_URL=https://28ttcdqa7mp95pjmi56s6s2wkmqjg8jmkhpkt6ueraxx.node.k8s.prd.nos.ci/api
+# Note baseURL for Ollama needs to be appended with `/api`
+OLLAMA_API_URL=https://3yt39qx97wc9hqwwmylrphi4jsxrngjzxnjakkybnxbw.node.k8s.prd.nos.ci/api
 MODEL_NAME_AT_ENDPOINT=qwen3:8b
 ```
 
@@ -115,8 +116,8 @@ OPENAI_API_KEY=your-key-here
 
 **Important Dates:**
 - Start Challenge: 10 October
-- Submission Deadline: 24 October
-- Winners Announced: 31 October
+- Submission Deadline: 31 October
+- Winners Announced: 07 October
 
 ### Phase 1: Development
 
