@@ -3,7 +3,7 @@
     {
       "id": "agent",
       "args": {
-        "image": "wuododhis/foundersclaw:latest",
+        "image": "cyborg81/foundersclaw:latest",
         "expose": 3000,
         "env": {
           "OPENAI_API_KEY": "nosana",
