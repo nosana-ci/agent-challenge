@@ -4,8 +4,10 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "elizaos start --character ./characters/agent.character.json",
-    "dev": "elizaos dev --character ./characters/agent.character.json",
+    "start": "node ui/server.mjs",
+    "dev": "node ui/server.mjs",
+    "start:eliza": "elizaos start --character ./characters/agent.character.json",
+    "dev:eliza": "elizaos dev --character ./characters/agent.character.json",
     "brief": "python3 main.py --mode run-once --send",
     "demo:python": "python3 demo.py"
   },

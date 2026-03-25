@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FoundersClaw</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="page">
+      <section class="hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Nosana x ElizaOS Challenge</p>
+          <h1>FoundersClaw</h1>
+          <p class="subtitle">
+            A crypto founder’s AI Chief of Staff for code, treasury, token, and community visibility.
+          </p>
+        </div>
+        <div class="hero-card">
+          <p class="card-label">Live Controls</p>
+          <button id="run-brief" class="primary">Run Daily Brief</button>
+          <label class="checkbox">
+            <input id="send-telegram" type="checkbox" checked />
+            <span>Send to Telegram</span>
+          </label>
+          <p id="status" class="status">Ready.</p>
+        </div>
+      </section>
+
+      <section class="grid">
+        <article class="panel">
+          <div class="panel-head">
+            <h2>Daily Brief</h2>
+            <span class="badge">Founder Ops</span>
+          </div>
+          <pre id="brief-output" class="brief-output">No brief generated yet.</pre>
+        </article>
+
+        <article class="panel side-panel">
+          <div class="panel-head">
+            <h2>System</h2>
+            <span class="badge subtle">Status</span>
+          </div>
+          <div id="health-output" class="meta-block">Checking UI health...</div>
+          <div id="tooling-output" class="meta-block">Checking tool connectivity...</div>
+        </article>
+      </section>
+    </main>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
