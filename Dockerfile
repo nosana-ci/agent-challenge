@@ -5,6 +5,7 @@ FROM node:23-slim AS base
 # Install system dependencies needed for native modules (e.g. better-sqlite3)
 RUN apt-get update && apt-get install -y \
   python3 \
+  python3-pip \
   make \
   g++ \
   git \
@@ -19,9 +20,10 @@ WORKDIR /app
 # Install pnpm
 RUN npm install -g pnpm
 
-# Copy package manifest and install dependencies
-COPY package.json ./
+# Copy package manifests and Python requirements first for better layer caching
+COPY package.json bun.lock tsconfig.json requirements.txt ./
 RUN pnpm install
+RUN pip3 install -r requirements.txt
 
 # Copy all source files
 COPY . .

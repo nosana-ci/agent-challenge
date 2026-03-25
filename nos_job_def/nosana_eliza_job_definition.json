@@ -3,14 +3,28 @@
     {
       "id": "agent",
       "args": {
-        "image": "yourusername/nosana-eliza-agent:latest",
+        "image": "wuododhis/foundersclaw:latest",
         "expose": 3000,
         "env": {
           "OPENAI_API_KEY": "nosana",
-          "OPENAI_API_URL": "TODO: replace with actual Nosana Qwen3.5 endpoint URL",
-          "MODEL_NAME": "qwen3.5-27b",
+          "OPENAI_API_URL": "https://<nosana-endpoint>.node.k8s.prd.nos.ci/v1",
+          "MODEL_NAME": "Qwen3.5-27B-AWQ-4bit",
           "SERVER_PORT": "3000",
-          "NODE_ENV": "production"
+          "NODE_ENV": "production",
+          "CLAWFOUNDER_GITHUB_REPO": "${CLAWFOUNDER_GITHUB_REPO}",
+          "CLAWFOUNDER_GITHUB_TOKEN": "${CLAWFOUNDER_GITHUB_TOKEN}",
+          "CLAWFOUNDER_WALLET_ADDRESS": "${CLAWFOUNDER_WALLET_ADDRESS}",
+          "CLAWFOUNDER_WALLET_NETWORK": "${CLAWFOUNDER_WALLET_NETWORK}",
+          "CLAWFOUNDER_ALCHEMY_API_KEY": "${CLAWFOUNDER_ALCHEMY_API_KEY}",
+          "CLAWFOUNDER_WALLET_NATIVE_SYMBOL": "${CLAWFOUNDER_WALLET_NATIVE_SYMBOL}",
+          "CLAWFOUNDER_WALLET_NATIVE_DECIMALS": "${CLAWFOUNDER_WALLET_NATIVE_DECIMALS}",
+          "CLAWFOUNDER_TELEGRAM_BOT_TOKEN": "${CLAWFOUNDER_TELEGRAM_BOT_TOKEN}",
+          "CLAWFOUNDER_TELEGRAM_CHAT_ID": "${CLAWFOUNDER_TELEGRAM_CHAT_ID}",
+          "CLAWFOUNDER_TELEGRAM_LOOKBACK_HOURS": "${CLAWFOUNDER_TELEGRAM_LOOKBACK_HOURS}",
+          "CLAWFOUNDER_PRICE_TOKEN_ID": "${CLAWFOUNDER_PRICE_TOKEN_ID}",
+          "CLAWFOUNDER_PRICE_VS_CURRENCY": "${CLAWFOUNDER_PRICE_VS_CURRENCY}",
+          "CLAWFOUNDER_ALERT_NO_COMMIT_DAYS": "${CLAWFOUNDER_ALERT_NO_COMMIT_DAYS}",
+          "CLAWFOUNDER_ALERT_LARGE_TRANSACTION_USD": "${CLAWFOUNDER_ALERT_LARGE_TRANSACTION_USD}"
         }
       },
       "execution": {

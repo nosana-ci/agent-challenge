@@ -132,9 +132,9 @@ function buildFallbackBrief(toolResponses: DailyBriefResult["toolResponses"]): s
 }
 
 async function generateBriefWithQwen(toolResponses: DailyBriefResult["toolResponses"]): Promise<string> {
-  const endpoint = process.env.QWEN_API_URL;
-  const apiKey = process.env.QWEN_API_KEY;
-  const model = process.env.QWEN_MODEL || "qwen3.5";
+  const endpoint = process.env.OPENAI_API_URL;
+  const apiKey = process.env.OPENAI_API_KEY;
+  const model = process.env.MODEL_NAME || "Qwen3.5-27B-AWQ-4bit";
 
   if (!endpoint || !apiKey) {
     return buildFallbackBrief(toolResponses);

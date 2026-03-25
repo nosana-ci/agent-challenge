@@ -92,3 +92,6 @@ pnpm-lock.yaml
 bun.lockb
 /.eliza/.elizadb
 /dist
+__pycache__/
+*.pyc
+.venv/

@@ -32,9 +32,9 @@ ENV_VAR_MAP = {
         "vs_currency": "CLAWFOUNDER_PRICE_VS_CURRENCY",
     },
     "llm": {
-        "endpoint": "QWEN_API_URL",
-        "api_key": "QWEN_API_KEY",
-        "model": "QWEN_MODEL",
+        "endpoint": "OPENAI_API_URL",
+        "api_key": "OPENAI_API_KEY",
+        "model": "MODEL_NAME",
     },
     "alerts": {
         "no_commit_days": "CLAWFOUNDER_ALERT_NO_COMMIT_DAYS",

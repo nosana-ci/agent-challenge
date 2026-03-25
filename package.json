@@ -1,11 +1,13 @@
 {
-  "name": "nosana-eliza-agent",
+  "name": "foundersclaw",
   "version": "0.1.0",
   "private": true,
   "type": "module",
   "scripts": {
     "start": "elizaos start --character ./characters/agent.character.json",
-    "dev": "elizaos dev --character ./characters/agent.character.json"
+    "dev": "elizaos dev --character ./characters/agent.character.json",
+    "brief": "python3 main.py --mode run-once --send",
+    "demo:python": "python3 demo.py"
   },
   "dependencies": {
     "@elizaos/core": "^1.0.0",
