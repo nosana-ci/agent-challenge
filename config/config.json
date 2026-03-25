@@ -1,0 +1,36 @@
+{
+  "github": {
+    "repo": "owner/repository",
+    "token": "",
+    "timeout_seconds": 20
+  },
+  "wallet": {
+    "address": "0x0000000000000000000000000000000000000000",
+    "network": "eth-mainnet",
+    "alchemy_api_key": "",
+    "native_symbol": "ETH",
+    "native_decimals": 18,
+    "timeout_seconds": 20
+  },
+  "telegram": {
+    "bot_token": "",
+    "chat_id": "",
+    "lookback_hours": 24,
+    "timeout_seconds": 20
+  },
+  "price": {
+    "token_id": "ethereum",
+    "vs_currency": "usd",
+    "timeout_seconds": 20
+  },
+  "llm": {
+    "endpoint": "",
+    "api_key": "",
+    "model": "qwen3.5",
+    "timeout_seconds": 30
+  },
+  "alerts": {
+    "no_commit_days": 3,
+    "large_transaction_usd": 10000
+  }
+}
