@@ -40,6 +40,10 @@ ENV_VAR_MAP = {
         "no_commit_days": "CLAWFOUNDER_ALERT_NO_COMMIT_DAYS",
         "large_transaction_usd": "CLAWFOUNDER_ALERT_LARGE_TRANSACTION_USD",
     },
+    "memory": {
+        "db_path": "CLAWFOUNDER_MEMORY_DB_PATH",
+        "recent_runs_limit": "CLAWFOUNDER_MEMORY_RECENT_RUNS_LIMIT",
+    },
 }
 
 

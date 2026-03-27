@@ -95,3 +95,4 @@ bun.lockb
 __pycache__/
 *.pyc
 .venv/
+data/

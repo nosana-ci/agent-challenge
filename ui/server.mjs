@@ -154,6 +154,13 @@ const server = createServer(async (req, res) => {
       return;
     }
 
+    if (req.method === "GET" && url.pathname === "/api/memory") {
+      const result = await runPythonBackend(["latest-memory"]);
+      res.writeHead(200, { "Content-Type": "application/json; charset=utf-8" });
+      res.end(JSON.stringify(result));
+      return;
+    }
+
     await serveStatic(res, url.pathname);
   } catch (error) {
     res.writeHead(500, { "Content-Type": "application/json; charset=utf-8" });

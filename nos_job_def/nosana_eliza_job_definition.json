@@ -1,4 +1,6 @@
 {
+  "type": "container",
+  "version": "0.1",
   "ops": [
     {
       "id": "agent",
@@ -10,6 +12,7 @@
           "OPENAI_API_URL": "https://<nosana-endpoint>.node.k8s.prd.nos.ci/v1",
           "MODEL_NAME": "Qwen3.5-27B-AWQ-4bit",
           "SERVER_PORT": "3000",
+          "START_ELIZA": "0",
           "NODE_ENV": "production",
           "CLAWFOUNDER_GITHUB_REPO": "${CLAWFOUNDER_GITHUB_REPO}",
           "CLAWFOUNDER_GITHUB_TOKEN": "${CLAWFOUNDER_GITHUB_TOKEN}",
@@ -24,7 +27,9 @@
           "CLAWFOUNDER_PRICE_TOKEN_ID": "${CLAWFOUNDER_PRICE_TOKEN_ID}",
           "CLAWFOUNDER_PRICE_VS_CURRENCY": "${CLAWFOUNDER_PRICE_VS_CURRENCY}",
           "CLAWFOUNDER_ALERT_NO_COMMIT_DAYS": "${CLAWFOUNDER_ALERT_NO_COMMIT_DAYS}",
-          "CLAWFOUNDER_ALERT_LARGE_TRANSACTION_USD": "${CLAWFOUNDER_ALERT_LARGE_TRANSACTION_USD}"
+          "CLAWFOUNDER_ALERT_LARGE_TRANSACTION_USD": "${CLAWFOUNDER_ALERT_LARGE_TRANSACTION_USD}",
+          "CLAWFOUNDER_MEMORY_DB_PATH": "${CLAWFOUNDER_MEMORY_DB_PATH}",
+          "CLAWFOUNDER_MEMORY_RECENT_RUNS_LIMIT": "${CLAWFOUNDER_MEMORY_RECENT_RUNS_LIMIT}"
         }
       },
       "execution": {
@@ -32,6 +37,5 @@
       },
       "type": "container/run"
     }
-  ],
-  "version": "0.1"
+  ]
 }

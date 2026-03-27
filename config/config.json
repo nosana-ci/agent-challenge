@@ -32,5 +32,9 @@
   "alerts": {
     "no_commit_days": 3,
     "large_transaction_usd": 10000
+  },
+  "memory": {
+    "db_path": "data/clawfounder_memory.db",
+    "recent_runs_limit": 5
   }
 }

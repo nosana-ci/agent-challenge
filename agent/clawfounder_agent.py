@@ -3,8 +3,10 @@ from __future__ import annotations
 from dataclasses import dataclass
 from datetime import datetime, timezone
 import json
+import statistics
 from typing import Any, Dict, List, Optional
 
+from agent.memory_store import MemoryStore
 from agent.qwen_client import QwenClient
 from agent.tools_registry import call_registered_tool
 
@@ -182,8 +184,14 @@ class ClawFounderAgent:
         self.config = config
         self.insight_engine = InsightEngine()
         self.qwen_client = QwenClient(config.get("llm", {}))
+        memory_config = config.get("memory", {})
+        self.memory_store = MemoryStore(memory_config.get("db_path", "data/clawfounder_memory.db"))
 
     def run(self) -> AgentRunResult:
+        previous_run = self.memory_store.get_latest_run()
+        recent_runs = self.memory_store.get_recent_runs(
+            limit=int(self.config.get("memory", {}).get("recent_runs_limit", 5))
+        )
         price_response = self._call_tool("get_token_price")
         github_response = self._call_tool("get_github_activity")
         wallet_response = self._call_tool(
@@ -209,6 +217,23 @@ class ClawFounderAgent:
             community_data=community_data,
             config=self.config,
         )
+        alerts.extend(
+            self._build_tool_health_alerts(
+                github_response=github_response,
+                price_response=price_response,
+                wallet_response=wallet_response,
+                telegram_response=telegram_response,
+            )
+        )
+        memory_context = self._build_memory_context(
+            previous_run=previous_run,
+            recent_runs=recent_runs,
+            github_data=github_data,
+            wallet_data=wallet_data,
+            price_data=price_data,
+            community_data=community_data,
+            alerts=alerts,
+        )
 
         fallback_brief = self._build_daily_brief(
             github_data=github_data,
@@ -216,6 +241,7 @@ class ClawFounderAgent:
             price_data=price_data,
             community_data=community_data,
             alerts=alerts,
+            memory_context=memory_context,
         )
         brief = self._build_llm_brief(
             github_data=github_data,
@@ -223,8 +249,19 @@ class ClawFounderAgent:
             price_data=price_data,
             community_data=community_data,
             alerts=alerts,
+            memory_context=memory_context,
             fallback_brief=fallback_brief,
         )
+
+        persisted_snapshot = {
+            "github": github_data,
+            "wallet": wallet_data,
+            "price": price_data,
+            "community": community_data,
+            "alerts": alerts,
+            "memory_context": memory_context,
+        }
+        saved_run = self.memory_store.save_run(brief=brief, snapshot=persisted_snapshot)
 
         return AgentRunResult(
             brief=brief,
@@ -241,8 +278,37 @@ class ClawFounderAgent:
                 "price": price_data,
                 "community": community_data,
                 "alerts": alerts,
+                "memory": {
+                    "previous_run": previous_run,
+                    "comparison": memory_context,
+                    "saved_run": saved_run,
+                },
             },
         )
+
+    def _build_tool_health_alerts(
+        self,
+        github_response: Dict[str, Any],
+        price_response: Dict[str, Any],
+        wallet_response: Dict[str, Any],
+        telegram_response: Dict[str, Any],
+    ) -> List[str]:
+        source_map = {
+            "GitHub": github_response,
+            "Price": price_response,
+            "Wallet": wallet_response,
+            "Telegram": telegram_response,
+        }
+        health_alerts: List[str] = []
+        for source_name, response in source_map.items():
+            status = (response or {}).get("status")
+            if status == "ok":
+                continue
+            error = (response or {}).get("error") or "unknown error"
+            health_alerts.append(
+                f"{source_name} data source failed ({error}). Metrics may be incomplete."
+            )
+        return health_alerts
 
     def send_brief(self, brief: str) -> Dict[str, Any]:
         return self._call_tool("send_telegram_message", {"text": brief})
@@ -260,12 +326,16 @@ class ClawFounderAgent:
         price_data: Dict[str, Any],
         community_data: Dict[str, Any],
         alerts: List[str],
+        memory_context: Dict[str, Any],
         fallback_brief: str,
     ) -> str:
         prompt = "\n".join(
             [
                 "Create the final founder brief using the required structure.",
                 "Report insights and risks, not raw payload dumps.",
+                "Use memory and change detection to explain what changed since the last run.",
+                "Write like a concise Chief of Staff, not like a dashboard.",
+                "Use founder baseline behavior and highlight only anomalous movements.",
                 "Return only the formatted brief.",
                 "",
                 f"GitHub summary: {json.dumps(github_data)}",
@@ -273,6 +343,7 @@ class ClawFounderAgent:
                 f"Price summary: {json.dumps(price_data)}",
                 f"Community summary: {json.dumps(community_data)}",
                 f"Alerts: {json.dumps(alerts)}",
+                f"Memory context: {json.dumps(memory_context)}",
             ]
         )
         generated = self.qwen_client.generate_brief(
@@ -288,38 +359,344 @@ class ClawFounderAgent:
         price_data: Dict[str, Any],
         community_data: Dict[str, Any],
         alerts: List[str],
+        memory_context: Dict[str, Any],
     ) -> str:
         now = _now_utc().strftime("%Y-%m-%d")
-        last_commit_at = _parse_iso8601(github_data.get("last_commit_at"))
-        if last_commit_at:
-            last_commit_hours = int((_now_utc() - last_commit_at).total_seconds() // 3600)
-            last_commit_text = f"{last_commit_hours} hours ago"
-        else:
-            last_commit_text = "No recent commits"
-
-        wallet_balance_usd = float(wallet_data.get("balance_usd", 0.0))
-        treasury_change_pct = float(wallet_data.get("balance_change_pct_24h", 0.0))
-        largest_tx_usd = 0.0
-        if wallet_data.get("largest_transaction_24h"):
-            largest_tx_usd = float(wallet_data["largest_transaction_24h"].get("usd_value", 0.0))
-
-        alert_lines = "\n".join(f"- {item}" for item in alerts)
+        alert_lines = "\n".join(f"- {item}" for item in alerts[:4])
+        code_lines = "\n".join(f"- {line}" for line in memory_context["code_activity"])
+        treasury_lines = "\n".join(f"- {line}" for line in memory_context["treasury"])
+        community_lines = "\n".join(f"- {line}" for line in memory_context["community"])
+        priority_lines = "\n".join(f"- {line}" for line in memory_context["priorities"])
+        memory_lines = "\n".join(f"- {line}" for line in memory_context["memory_notes"])
+        moat_lines = "\n".join(f"- {line}" for line in memory_context["moat_signals"])
 
         return (
             f"ClawFounder Daily Brief — {now}\n\n"
             f"Code Activity:\n"
-            f"- Commits: {github_data.get('commit_count_24h', 0)}\n"
-            f"- New PRs: {github_data.get('pull_request_count_24h', 0)}\n"
-            f"- New Issues: {github_data.get('issue_count_24h', 0)}\n"
-            f"- Last commit: {last_commit_text}\n\n"
+            f"{code_lines}\n\n"
             f"Treasury:\n"
-            f"- Wallet Balance: {_format_money(wallet_balance_usd)}\n"
-            f"- Change (24h): {_format_percent(treasury_change_pct)}\n"
-            f"- Largest Transaction: {_format_money(largest_tx_usd)}\n\n"
+            f"{treasury_lines}\n\n"
             f"Community:\n"
-            f"- Messages (24h): {community_data.get('message_count', 0)}\n"
-            f"- Sentiment: {community_data.get('sentiment', 'Neutral')}\n"
-            f"- Summary: {community_data.get('summary', 'No summary available.')}\n\n"
+            f"{community_lines}\n\n"
             f"Alerts:\n"
-            f"{alert_lines}"
+            f"{alert_lines}\n\n"
+            f"Priorities:\n"
+            f"{priority_lines}\n\n"
+            f"Founder Memory Graph:\n"
+            f"{moat_lines}\n\n"
+            f"Memory:\n"
+            f"{memory_lines}"
         )
+
+    def _build_memory_context(
+        self,
+        previous_run: Optional[Dict[str, Any]],
+        recent_runs: List[Dict[str, Any]],
+        github_data: Dict[str, Any],
+        wallet_data: Dict[str, Any],
+        price_data: Dict[str, Any],
+        community_data: Dict[str, Any],
+        alerts: List[str],
+    ) -> Dict[str, Any]:
+        previous_snapshot = previous_run.get("snapshot", {}) if previous_run else {}
+        previous_github = previous_snapshot.get("github", {})
+        previous_wallet = previous_snapshot.get("wallet", {})
+        previous_community = previous_snapshot.get("community", {})
+        previous_alerts = previous_snapshot.get("alerts", [])
+
+        code_activity = [
+            self._describe_code_activity(github_data, previous_github),
+            self._describe_development_risk(github_data),
+        ]
+        treasury = [
+            self._describe_treasury(wallet_data, previous_wallet, price_data),
+            self._describe_transaction_risk(wallet_data),
+        ]
+        community = [
+            self._describe_community(community_data, previous_community),
+            community_data.get("summary", "Community activity was limited today."),
+        ]
+
+        priorities = [
+            line
+            for line in [
+                self._build_priority_from_alerts(alerts),
+                self._build_priority_from_activity(github_data, community_data),
+                self._build_priority_from_treasury(wallet_data),
+            ]
+            if line
+        ]
+        if not priorities:
+            priorities.append("No immediate intervention needed; keep monitoring for trend changes.")
+
+        memory_notes = []
+        if previous_run:
+            previous_time = previous_run.get("created_at", "previous run")
+            memory_notes.append(f"Compared against the last saved run from {previous_time}.")
+        else:
+            memory_notes.append("This is the first saved run, so future briefs will include stronger trend context.")
+
+        repeated_alerts = sorted(set(alerts).intersection(previous_alerts))
+        if repeated_alerts:
+            memory_notes.append(f"Repeated risk carried over: {repeated_alerts[0]}")
+        else:
+            memory_notes.append("No repeated alert pattern was carried over from the prior run.")
+
+        moat_signals = self._build_moat_signals(
+            recent_runs=recent_runs,
+            github_data=github_data,
+            wallet_data=wallet_data,
+            community_data=community_data,
+            alerts=alerts,
+        )
+
+        return {
+            "code_activity": code_activity,
+            "treasury": treasury,
+            "community": community,
+            "priorities": priorities,
+            "moat_signals": moat_signals,
+            "memory_notes": memory_notes,
+            "previous_run_available": previous_run is not None,
+        }
+
+    def _build_moat_signals(
+        self,
+        recent_runs: List[Dict[str, Any]],
+        github_data: Dict[str, Any],
+        wallet_data: Dict[str, Any],
+        community_data: Dict[str, Any],
+        alerts: List[str],
+    ) -> List[str]:
+        historical_snapshots = [run.get("snapshot", {}) for run in recent_runs if run.get("snapshot")]
+        if not historical_snapshots:
+            return [
+                "Baseline is initializing. After a few runs, anomaly scoring will become founder-specific.",
+            ]
+
+        commit_history = self._extract_numeric_series(historical_snapshots, "github", "commit_count_24h")
+        message_history = self._extract_numeric_series(historical_snapshots, "community", "message_count")
+        tx_history = self._extract_largest_tx_series(historical_snapshots)
+
+        commit_signal = self._build_anomaly_signal(
+            label="Code output",
+            current=float(github_data.get("commit_count_24h", 0)),
+            history=commit_history,
+            higher_is_risk=False,
+            low_description="below founder baseline",
+            high_description="above founder baseline",
+        )
+        community_signal = self._build_anomaly_signal(
+            label="Community volume",
+            current=float(community_data.get("message_count", 0)),
+            history=message_history,
+            higher_is_risk=True,
+            low_description="lower than normal",
+            high_description="spiking above normal",
+        )
+        tx_signal = self._build_anomaly_signal(
+            label="Largest treasury transfer",
+            current=float(wallet_data.get("largest_transaction_24h", {}).get("usd_value", 0.0))
+            if wallet_data.get("largest_transaction_24h")
+            else 0.0,
+            history=tx_history,
+            higher_is_risk=True,
+            low_description="within founder norm",
+            high_description="spiking above normal",
+            money_label=True,
+        )
+
+        recurring_risks = self._build_recurring_risk_signal(historical_snapshots, alerts)
+        return [commit_signal, community_signal, tx_signal, recurring_risks]
+
+    def _extract_numeric_series(
+        self,
+        snapshots: List[Dict[str, Any]],
+        section: str,
+        field: str,
+    ) -> List[float]:
+        values: List[float] = []
+        for snapshot in snapshots:
+            section_data = snapshot.get(section, {})
+            value = section_data.get(field)
+            if value is None:
+                continue
+            try:
+                values.append(float(value))
+            except (TypeError, ValueError):
+                continue
+        return values
+
+    def _extract_largest_tx_series(self, snapshots: List[Dict[str, Any]]) -> List[float]:
+        values: List[float] = []
+        for snapshot in snapshots:
+            wallet = snapshot.get("wallet", {})
+            largest_tx = wallet.get("largest_transaction_24h")
+            if not largest_tx:
+                values.append(0.0)
+                continue
+            try:
+                values.append(float(largest_tx.get("usd_value", 0.0)))
+            except (TypeError, ValueError):
+                values.append(0.0)
+        return values
+
+    def _build_anomaly_signal(
+        self,
+        label: str,
+        current: float,
+        history: List[float],
+        higher_is_risk: bool,
+        low_description: str,
+        high_description: str,
+        money_label: bool = False,
+    ) -> str:
+        if not history:
+            return f"{label}: baseline is still warming up."
+        baseline = statistics.mean(history)
+        spread = statistics.pstdev(history) if len(history) > 1 else 0.0
+        threshold = max(1.0, spread * 1.5)
+        delta = current - baseline
+        is_anomaly = abs(delta) > threshold
+
+        current_text = _format_money(current) if money_label else f"{int(current)}"
+        baseline_text = _format_money(baseline) if money_label else f"{baseline:.1f}"
+
+        if not is_anomaly:
+            return f"{label}: {current_text}, within your baseline band (avg {baseline_text})."
+
+        if delta > 0:
+            risk_text = high_description if higher_is_risk else "higher than normal"
+        else:
+            risk_text = low_description if not higher_is_risk else "lower than normal"
+        return f"{label}: {current_text}, {risk_text} versus baseline {baseline_text}."
+
+    def _build_recurring_risk_signal(
+        self,
+        historical_snapshots: List[Dict[str, Any]],
+        current_alerts: List[str],
+    ) -> str:
+        recurring_alerts: Dict[str, int] = {}
+        for snapshot in historical_snapshots:
+            for alert in snapshot.get("alerts", []):
+                if alert == "No unusual activity detected.":
+                    continue
+                recurring_alerts[alert] = recurring_alerts.get(alert, 0) + 1
+
+        active_recurrences = []
+        for alert in current_alerts:
+            if alert == "No unusual activity detected.":
+                continue
+            if recurring_alerts.get(alert, 0) >= 2:
+                active_recurrences.append((alert, recurring_alerts[alert]))
+
+        if not active_recurrences:
+            return "Recurring risk ledger: no sustained alert pattern crossed the escalation threshold."
+
+        top_alert, count = sorted(active_recurrences, key=lambda item: item[1], reverse=True)[0]
+        return f"Recurring risk ledger: '{top_alert}' has appeared in {count} recent runs."
+
+    def _describe_code_activity(self, github_data: Dict[str, Any], previous_github: Dict[str, Any]) -> str:
+        commits = int(github_data.get("commit_count_24h", 0))
+        prs = int(github_data.get("pull_request_count_24h", 0))
+        issues = int(github_data.get("issue_count_24h", 0))
+        previous_commits = int(previous_github.get("commit_count_24h", 0))
+
+        if commits == 0 and previous_commits == 0:
+            return "Engineering remained quiet across consecutive runs, which raises execution visibility risk."
+        if commits > previous_commits:
+            return f"Engineering activity picked up to {commits} commits, up from {previous_commits} in the prior run."
+        if commits < previous_commits:
+            return f"Commit velocity slowed to {commits} from {previous_commits}, so delivery pace should be checked."
+        return f"Engineering output held steady at {commits} commits, with {prs} PRs and {issues} issues opened."
+
+    def _describe_development_risk(self, github_data: Dict[str, Any]) -> str:
+        last_commit_at = _parse_iso8601(github_data.get("last_commit_at"))
+        if not last_commit_at:
+            return "No recent commit timestamp is available, so repo recency is unclear."
+        hours_since_commit = int((_now_utc() - last_commit_at).total_seconds() // 3600)
+        if hours_since_commit >= 24:
+            return f"Latest commit is {hours_since_commit} hours old, which suggests momentum is cooling."
+        return f"The codebase was touched {hours_since_commit} hours ago, so work is still active."
+
+    def _describe_treasury(
+        self,
+        wallet_data: Dict[str, Any],
+        previous_wallet: Dict[str, Any],
+        price_data: Dict[str, Any],
+    ) -> str:
+        current_balance = float(wallet_data.get("balance_usd", 0.0))
+        previous_balance = float(previous_wallet.get("balance_usd", current_balance))
+        price_change = float(price_data.get("change_24h_pct", 0.0))
+        balance_delta = current_balance - previous_balance
+
+        if abs(balance_delta) < 1:
+            return (
+                f"Treasury balance is effectively flat at {_format_money(current_balance)} while token price moved "
+                f"{_format_percent(price_change)}."
+            )
+        direction = "up" if balance_delta > 0 else "down"
+        return (
+            f"Treasury balance is {direction} by {_format_money(abs(balance_delta))} versus the last run, "
+            f"now sitting at {_format_money(current_balance)}."
+        )
+
+    def _describe_transaction_risk(self, wallet_data: Dict[str, Any]) -> str:
+        largest_tx = wallet_data.get("largest_transaction_24h")
+        if not largest_tx:
+            return "No material on-chain transfer stood out in the last 24 hours."
+        usd_value = float(largest_tx.get("usd_value", 0.0))
+        direction = largest_tx.get("direction", "unknown")
+        if usd_value <= 0:
+            return "Transfers were detected, but no USD-normalized transaction stood out."
+        return f"Largest on-chain movement was a {direction} transfer worth {_format_money(usd_value)}."
+
+    def _describe_community(
+        self,
+        community_data: Dict[str, Any],
+        previous_community: Dict[str, Any],
+    ) -> str:
+        messages = int(community_data.get("message_count", 0))
+        previous_messages = int(previous_community.get("message_count", 0))
+        sentiment = community_data.get("sentiment", "Neutral")
+
+        if messages == 0 and previous_messages == 0:
+            return "Community has stayed quiet across runs, so sentiment confidence remains low."
+        if messages > previous_messages:
+            return (
+                f"Community activity rose to {messages} messages from {previous_messages}, "
+                f"with sentiment currently {sentiment.lower()}."
+            )
+        if messages < previous_messages:
+            return (
+                f"Community activity cooled to {messages} messages from {previous_messages}, "
+                f"with sentiment currently {sentiment.lower()}."
+            )
+        return f"Community volume held steady at {messages} messages, with {sentiment.lower()} tone."
+
+    def _build_priority_from_alerts(self, alerts: List[str]) -> Optional[str]:
+        meaningful_alerts = [alert for alert in alerts if alert != "No unusual activity detected."]
+        if not meaningful_alerts:
+            return None
+        return f"Prioritize founder review of the top alert: {meaningful_alerts[0]}"
+
+    def _build_priority_from_activity(
+        self,
+        github_data: Dict[str, Any],
+        community_data: Dict[str, Any],
+    ) -> Optional[str]:
+        if int(github_data.get("commit_count_24h", 0)) == 0:
+            return "Check whether engineering is blocked or simply between milestones."
+        if community_data.get("sentiment") == "Negative":
+            return "Review Telegram pain points and decide whether a founder-facing response is needed."
+        return "Use the current signal set to confirm whether execution and community momentum still align."
+
+    def _build_priority_from_treasury(self, wallet_data: Dict[str, Any]) -> Optional[str]:
+        largest_tx = wallet_data.get("largest_transaction_24h")
+        if not largest_tx:
+            return None
+        usd_value = float(largest_tx.get("usd_value", 0.0))
+        threshold = float(self.config.get("alerts", {}).get("large_transaction_usd", 10000))
+        if usd_value >= threshold:
+            return "Validate the intent behind the largest transfer and confirm it matches treasury plans."
+        return None

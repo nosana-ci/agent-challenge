@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 
 from agent.clawfounder_agent import ClawFounderAgent
+from agent.memory_store import MemoryStore
 from agent.tools_registry import call_registered_tool, list_registered_tools
 from config.runtime_config import DEFAULT_CONFIG_PATH, load_config
 
@@ -38,6 +39,16 @@ def _run_agent(config_path: str, send: bool) -> Dict[str, Any]:
     }
 
 
+def _latest_memory(config_path: str) -> Dict[str, Any]:
+    config = _load_runtime_config(config_path)
+    memory = MemoryStore(config.get("memory", {}).get("db_path", "data/clawfounder_memory.db"))
+    limit = int(config.get("memory", {}).get("recent_runs_limit", 5))
+    return {
+        "latest_run": memory.get_latest_run(),
+        "recent_runs": memory.get_recent_runs(limit=limit),
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="ClawFounder Python backend bridge")
     parser.add_argument("--config", default=str(DEFAULT_CONFIG_PATH), help="Path to config.json")
@@ -54,6 +65,9 @@ def main() -> None:
     agent_parser = subparsers.add_parser("run-agent", help="Run the ClawFounder agent")
     agent_parser.add_argument("--send", action="store_true", help="Send the generated brief to Telegram")
     agent_parser.set_defaults(handler=lambda args: _run_agent(args.config, args.send))
+
+    memory_parser = subparsers.add_parser("latest-memory", help="Show saved memory for recent runs")
+    memory_parser.set_defaults(handler=lambda args: _latest_memory(args.config))
 
     args = parser.parse_args()
     result = args.handler(args)
