@@ -70,6 +70,9 @@ There are no strict requirements on use case — build whatever is most useful t
 git clone https://github.com/YOUR-USERNAME/agent-challenge
 cd agent-challenge
 
+# Install dependencies
+pnpm install
+
 # Copy and configure environment variables
 cp .env.example .env
 # Edit .env with your Nosana endpoint details
