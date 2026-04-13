@@ -1,11 +1,12 @@
 {
-  "name": "nosana-eliza-agent",
-  "version": "0.1.0",
+  "name": "zion-personal-agent",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
+  "description": "ZION - Sovereign crypto intelligence agent built on ElizaOS for the Nosana Builders Challenge",
   "scripts": {
-    "start": "elizaos start --character ./characters/agent.character.json",
-    "dev": "elizaos dev --character ./characters/agent.character.json"
+    "start": "elizaos start --character ./characters/zion-agent.character.json",
+    "dev": "elizaos dev --character ./characters/zion-agent.character.json"
   },
   "dependencies": {
     "@elizaos/core": "^1.0.0",
@@ -16,5 +17,18 @@
   "devDependencies": {
     "@elizaos/cli": "^1.0.0",
     "typescript": "^5.0.0"
-  }
+  },
+  "keywords": [
+    "elizaos",
+    "ai-agent",
+    "crypto",
+    "nosana",
+    "defi",
+    "security",
+    "coingecko",
+    "fear-greed",
+    "decentralized-ai"
+  ],
+  "author": "Padrao Bitcoin",
+  "license": "MIT"
 }

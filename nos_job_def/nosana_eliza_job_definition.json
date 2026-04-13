@@ -1,14 +1,14 @@
 {
   "ops": [
     {
-      "id": "agent",
+      "id": "zion-agent",
       "args": {
-        "image": "yourusername/nosana-eliza-agent:latest",
+        "image": "standardbitcoin10/zion-personal-agent:latest",
         "expose": 3000,
         "env": {
           "OPENAI_API_KEY": "nosana",
-          "OPENAI_API_URL": "TODO: replace with actual Nosana Qwen3.5 endpoint URL",
-          "MODEL_NAME": "qwen3.5-27b",
+          "OPENAI_API_URL": "https://3gsrmj6gchzyws9bnc835apd4fh6t5tyeppmbxmzrzhn.node.k8s.prd.nos.ci/v1",
+          "MODEL_NAME": "Qwen3.5-27B-AWQ-4bit",
           "SERVER_PORT": "3000",
           "NODE_ENV": "production"
         }
