@@ -1,42 +1,28 @@
 /**
- * Custom Plugin Entry Point
- *
- * This file is where you can define custom actions, providers, and evaluators
- * for your ElizaOS agent. Add your logic here and reference this plugin in
- * your character file.
- *
- * ElizaOS Plugin Docs: https://elizaos.github.io/eliza/docs/core/plugins
+ * ClawForge — Personal Bounty Intelligence Agent
+ * 
+ * Built for: Nosana Builders Challenge × ElizaOS ($3K USDC)
+ * Agent: ClawForge — personal AI for bounty hunting
+ * 
+ * This agent helps discover, evaluate, and execute high-value
+ * bounty opportunities across Superteam, Algora, and GitHub.
+ * 
+ * Key Features:
+ * - Bounty discovery and ranking across 3 major platforms
+ * - PR status tracking for active submissions
+ * - Strategic intelligence on the bounty landscape
+ * - AGENT_ALLOWED bounty filtering (our specialty)
+ * 
+ * Submission checklist:
+ * ✅ Public GitHub fork (liufang88789-ui/agent-challenge)
+ * ⏳ Live Nosana deployment URL (in progress)
+ * ✅ README with project description
+ * ⏳ Video demo (<1 min, in progress)
+ * ⏳ Twitter/X post (in progress)
+ * ✅ Stars on Nosana repos (agent-challenge, nosana-programs, nosana-kit, nosana-cli)
+ * 
+ * Tech Stack: ElizaOS v2 + TypeScript + Docker + Nosana GPU network
  */
 
-import { type Plugin } from "@elizaos/core";
-
-/**
- * Example custom action.
- * Replace this with your own action logic.
- */
-const exampleAction = {
-  name: "EXAMPLE_ACTION",
-  description: "An example action — replace with your own.",
-  similes: ["DEMO", "SAMPLE"],
-  validate: async () => true,
-  handler: async (_runtime: unknown, message: { content: { text: string } }) => {
-    console.log("Custom action triggered with message:", message.content.text);
-    return true;
-  },
-  examples: [],
-};
-
-/**
- * Your custom plugin.
- * Add this plugin's name to the `plugins` array in your character file
- * to activate it.
- */
-export const customPlugin: Plugin = {
-  name: "custom-plugin",
-  description: "My custom ElizaOS plugin",
-  actions: [exampleAction],
-  providers: [],
-  evaluators: [],
-};
-
-export default customPlugin;
+export { clawForgePlugin } from "./bounty-plugin";
+export { clawForgePlugin as default } from "./bounty-plugin";

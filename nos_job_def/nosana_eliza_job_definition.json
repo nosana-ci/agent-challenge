@@ -1,14 +1,19 @@
 {
+  "version": "0.1",
+  "type": "container",
+  "meta": {
+    "trigger": "cli"
+  },
   "ops": [
     {
       "id": "agent",
       "args": {
-        "image": "yourusername/nosana-eliza-agent:latest",
+        "image": "ghcr.io/liufang88789-ui/agent-challenge/agent:latest",
         "expose": 3000,
         "env": {
           "OPENAI_API_KEY": "nosana",
-          "OPENAI_API_URL": "TODO: replace with actual Nosana Qwen3.5 endpoint URL",
-          "MODEL_NAME": "qwen3.5-27b",
+          "OPENAI_API_URL": "https://6vq2bcqphcansrs9b88ztxfs88oqy7etah2ugudytv2x.node.k8s.prd.nos.ci/v1",
+          "MODEL_NAME": "Qwen3.5-27B-AWQ-4bit",
           "SERVER_PORT": "3000",
           "NODE_ENV": "production"
         }
@@ -18,6 +23,5 @@
       },
       "type": "container/run"
     }
-  ],
-  "version": "0.1"
+  ]
 }
