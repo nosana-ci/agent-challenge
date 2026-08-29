@@ -3,7 +3,7 @@
     {
       "id": "raya-agent",
       "args": {
-        "image": "biyan/raya-eliza-agent:latest",
+        "image": "42318010020Biyan/raya-eliza-agent:latest",
         "expose": 3000,
         "env": {
           "OPENAI_API_KEY": "nosana",
