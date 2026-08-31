@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Raya · research companion</title>
+<style>
+  :root {
+    --bg: #0f1115;
+    --panel: #161a22;
+    --border: #262c38;
+    --text: #e6e9ef;
+    --muted: #9aa3b2;
+    --accent: #4f8cff;
+    --user: #1c2333;
+    --assistant: #1a1f2b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  header {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  header .dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: #3fbf6f;
+  }
+  header h1 { font-size: 15px; margin: 0; font-weight: 600; }
+  header span { color: var(--muted); font-size: 12px; }
+  #chat {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .msg {
+    max-width: 78%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    line-height: 1.5;
+    font-size: 14px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  .msg.user { align-self: flex-end; background: var(--user); border: 1px solid var(--border); }
+  .msg.assistant { align-self: flex-start; background: var(--assistant); border: 1px solid var(--border); }
+  .msg.meta { align-self: center; color: var(--muted); font-size: 12px; background: transparent; border: none; }
+  .typing::after {
+    content: "…";
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: 0; } }
+  #input-row {
+    padding: 14px 20px 18px;
+    border-top: 1px solid var(--border);
+    display: flex;
+    gap: 10px;
+  }
+  #input-row input {
+    flex: 1;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    padding: 12px 14px;
+    font-size: 14px;
+    outline: none;
+  }
+  #input-row input:focus { border-color: var(--accent); }
+  #input-row button {
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 10px;
+    padding: 0 20px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  #input-row button:disabled { opacity: 0.5; cursor: default; }
+  footer {
+    padding: 8px 20px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="dot"></div>
+  <h1>Raya</h1>
+  <span>personal research companion · running on Nosana</span>
+</header>
+
+<div id="chat">
+  <div class="msg meta">Raya is up. The chat goes through the agent REST API. Ask it to save a note (try: "save note groceries : milk and eggs") and then "get notes".</div>
+</div>
+
+<div id="input-row">
+  <input id="text-input" type="text" placeholder="Message Raya..." autocomplete="off">
+  <button id="send">Send</button>
+</div>
+
+<footer>
+  Qwen3.5-27B on decentralized GPU infrastructure · <a id="endpoint-label" href="#" style="color:inherit">endpoint: default</a>
+</footer>
+
+<script>
+  // Point this at your deployed agent URL. The ElizaOS agent exposes a
+  // REST API on port 3000. The /api/messages endpoint below matches the
+  // standard ElizaOS v2 direct client route.
+  const params = new URLSearchParams(window.location.search);
+  const AGENT_URL = params.get("endpoint") || window.location.origin;
+  document.getElementById("endpoint-label").href = AGENT_URL;
+  document.getElementById("endpoint-label").textContent = "endpoint: " + AGENT_URL;
+
+  const chatEl = document.getElementById("chat");
+  const inputEl = document.getElementById("text-input");
+  const sendBtn = document.getElementById("send");
+
+  function addMsg(role, text) {
+    const div = document.createElement("div");
+    div.className = "msg " + role;
+    div.textContent = text;
+    chatEl.appendChild(div);
+    chatEl.scrollTop = chatEl.scrollHeight;
+    return div;
+  }
+
+  function setBusy(busy) {
+    sendBtn.disabled = busy;
+    inputEl.disabled = busy;
+  }
+
+  async function sendMessage() {
+    const text = inputEl.value.trim();
+    if (!text) return;
+    inputEl.value = "";
+    addMsg("user", text);
+    const typing = addMsg("assistant", "");
+    typing.classList.add("typing");
+    setBusy(true);
+    try {
+      const res = await fetch(AGENT_URL + "/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, userId: "web-ui" }),
+      });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      const data = await res.json();
+      typing.classList.remove("typing");
+      typing.textContent = data.text || data.message || JSON.stringify(data);
+    } catch (err) {
+      typing.classList.remove("typing");
+      typing.textContent = "Could not reach the agent: " + err.message +
+        ". If you are viewing this locally, start the agent first. If you deployed it, pass ?endpoint=<your-nosana-url>.";
+    }
+    setBusy(false);
+  }
+
+  sendBtn.addEventListener("click", sendMessage);
+  inputEl.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") sendMessage();
+  });
+</script>
+</body>
+</html>

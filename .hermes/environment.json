@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "recipe": {
+    "name": "Node.js app",
+    "kind": "node",
+    "bootstrap": [
+      "bun install"
+    ],
+    "build": [],
+    "test": [],
+    "start": "bun run dev",
+    "port": 3000,
+    "readinessPath": "/",
+    "evidence": [
+      "Detected package.json",
+      "Package manager: bun",
+      "Scripts: start, dev"
+    ]
+  },
+  "updatedAt": "2026-08-29T16:51:18.554202+00:00"
+}
